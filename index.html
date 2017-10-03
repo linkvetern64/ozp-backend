@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  <link rel="shortcut icon" href="./img/favicon.ico">
+  <title>Home - ozp-backend</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = "/";
+  </script>
+  
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> ozp-backend</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href=".">Home</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#ozp-backend">ozp-backend</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#background">Background</a></li>
+        
+            <li><a class="toctree-l3" href="#3rd-party-services">3rd Party Services</a></li>
+        
+            <li><a class="toctree-l3" href="#getting-started">Getting Started</a></li>
+        
+            <li><a class="toctree-l3" href="#releasing">Releasing</a></li>
+        
+            <li><a class="toctree-l3" href="#for-developers">For Developers</a></li>
+        
+            <li><a class="toctree-l3" href="#controlling-access">Controlling Access</a></li>
+        
+            <li><a class="toctree-l3" href="#sample-users-for-basicauth">Sample Users for BasicAuth</a></li>
+        
+            <li><a class="toctree-l3" href="#domain-knowledge">Domain Knowledge</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="debugging/">Debugging</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">ozp-backend</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="ozp-backend">ozp-backend</h1>
+<p>Django-based backend API for the OZONE Platform (OZP). For those who just want
+to get OZP (Center, HUD, Webtop, IWC) up and running, see the
+<a href="https://github.com/ozone-development/ozp-ansible#quickstart">quickstart</a> of the <a href="https://github.com/ozone-development/ozp-ansible">ozp-ansible</a> project.</p>
+<h3 id="background">Background</h3>
+<p>ozp-backend replaces <a href="https://github.com/ozone-development/ozp-rest">ozp-rest</a>
+as the backend for Center, HUD, Webtop, and IWC. Notable differences include:
+<em> Python vs. Java/Groovy
+</em> Django, Django Rest Framework vs. Grails, JAX-RS
+* Postgres vs. MySQL</p>
+<h2 id="3rd-party-services">3rd Party Services</h2>
+<p>Travis-CI
+<a href="https://travis-ci.org/ozone-development/ozp-backend"><img alt="Build Status" src="https://travis-ci.org/aml-development/ozp-backend.svg?branch=master" /></a></p>
+<h2 id="getting-started">Getting Started</h2>
+<p>The recommended approach is to use the vagrant box referenced at the beginning
+of this README, which will create a production-esque deployment of OZP:</p>
+<ul>
+<li>Postgres (vs. SQLite)</li>
+<li>PKI (vs. HTTP Basic Auth)</li>
+<li>Use of external authorization service</li>
+<li>Enable HTTPS (via nginx reverse proxy)</li>
+<li>Served via Gunicorn (vs. Django development server)</li>
+</ul>
+<p>To serve the application on your host machine with minimal external dependencies,
+do the following:</p>
+<ol>
+<li>Remove psycopg2 from requirements.txt (so that Postgres won't be required)</li>
+<li>Enable HTTP Basic Auth and disable PKI authentication. In settings.py,
+<code>REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES</code> should be set to
+<code>'rest_framework.authentication.BasicAuthentication'</code></li>
+<li>Disable the authorization service. In settings.py, set <code>OZP.USE_AUTH_SERVER</code>
+to <code>False</code></li>
+<li>In settings.py, set <code>OZP.DEMO_APP_ROOT</code> to <code>localhost:8000</code> (or wherever
+the django app will be served at)</li>
+</ol>
+<p>Then, do the following:</p>
+<ol>
+<li>Install Python 3.4.3. Python can be installed by downloading the appropriate
+    files <a href="https://www.python.org/downloads/release/python-343/">here</a>. Note
+    that Python 3.4 includes both <code>pip</code> and <code>venv</code>, a built-in replacement
+    for the <code>virtualenv</code> package</li>
+<li>Create a new python environment using python 3.4.x. First, create a new
+    directory where this environment will live, for example, in
+    <code>~/python_envs/ozp</code>. Now create a new environment there:
+    <code>python3.4 -m venv ENV</code> (where <code>ENV</code> is the path you used above)</li>
+<li>Active the new environment: <code>source ENV/bin/activate</code></li>
+<li>Install the necessary dependencies into this python environment:
+    <code>pip install -r requirements.txt</code></li>
+<li>Run the server: <code>make dev</code></li>
+</ol>
+<p>Swagger documentation for the api is available at <code>http://localhost:8000/docs/</code>
+Use username <code>wsmith</code> password <code>password</code> when prompted for authentication info</p>
+<p>There's also the admin interface at <code>http://localhost:8000/admin</code>
+(username: <code>wsmith</code>, password: <code>password</code>)</p>
+<h3 id="runing-elasticsearch-for-search">Runing Elasticsearch for Search</h3>
+<p>ozp/Settings.py file variable needs to be updated  <br />
+ES_ENABLED = True  <br />
+After installing Elasticsearch run <code>make reindex_es</code> in the ozp-backend folder while inside of your $env     </p>
+<p><strong>Installing and Running Elasticsearch</strong>   <br />
+Elasticsearch 2.4.1 needs to be installed and run
+https://www.elastic.co/guide/en/elasticsearch/guide/current/running-elasticsearch.html</p>
+<p>The only requirement for installing Elasticsearch is a recent version of Java. Preferably, you should install the latest version of the official Java from www.java.com.    </p>
+<p>You can get the Elasticsearch 2.4.1 from https://www.elastic.co/blog/elasticsearch-2-4-1-released.  <br />
+To install Elasticsearch, download and extract the archive file for your platform. For more information, see the Installation topic in the Elasticsearch Reference.</p>
+<p><strong>Tip</strong>  <br />
+When installing Elasticsearch in production, you can choose to use the Debian or RPM packages provided on the downloads page. You can also use the officially supported Puppet module or Chef cookbook.  <br />
+Once you’ve extracted the archive file, Elasticsearch is ready to run. To start it up in the foreground:  <br />
+cd elasticsearch  <br />
+./bin/elasticsearch    </p>
+<h2 id="releasing">Releasing</h2>
+<p>Run <code>python release.py</code> to generate a tarball with Wheels for the application
+and all of its dependencies. See <code>release.py</code> for details</p>
+<h2 id="for-developers">For Developers</h2>
+<p>Understanding this project requires knowing a small-medium amount of Django and
+a large amount of Django Rest Framework (DRF). From Django itself:
+<em> Object-relational mapper (ORM)
+</em> Authentication
+<em> <code>manage.py</code> utility (testing, database migration)
+</em> Logging
+* Settings</p>
+<p>Most of the URLs and Views are done with DRF, and very little is done with
+templating, forms, and the admin site</p>
+<h3 id="plugins">Plugins</h3>
+<p>TODO Add documentation
+<em> How does it work
+</em> How do make a new plugin</p>
+<h3 id="pep8">Pep8</h3>
+<p>Pep8 is the Style Guide for Python Code</p>
+<pre><code>pep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --show-source
+autopep8 . -r --diff --ignore errors=E501,E123,E128,E121,E124  --max-line-length=5000
+</code></pre>
+
+<h3 id="serializers">Serializers</h3>
+<p>Serialization = Python obj -&gt; JSON</p>
+<p>Deserialization = JSON -&gt; Python obj</p>
+<p>DRF does not have a built-in, defacto way of specifying different serializers
+for handling input on a request vs output on a Response. Sometimes this is
+acceptable, but often times the two structures are not the same. For instance,
+some fields may be auto-generated on the server when a <code>POST</code> is made (so they
+shouldn't be part of the <code>POST</code> Request data that will be deserialized), but a
+<code>GET</code> request should return a Response that includes this information. For
+simple cases like this, Serializer fields can be marked as <code>read_only</code> or
+<code>write_only</code> (<code>read_only</code> fields will not become part of the serializer's
+<code>validated_data</code>). If more control than this is needed (e.g. very different input
+and output formats), the <code>get_serializer_class()</code> method can be overridden
+in the View and selected dynamically based on request.method (<code>POST</code>, <code>GET</code>,
+etc).</p>
+<p>For details regarding input vs output serializers:
+<em> https://github.com/tomchristie/django-rest-framework/issues/1563
+</em> http://stackoverflow.com/questions/17551380/python-rest-framwork-different-serializers-for-input-and-output-of-service</p>
+<p>Sometimes it might not be clear where the Serializer classes should live for
+nested objects. For example, the listing resource needs to serialize the nested
+Agency model - should that Agency serializer live in the listing resource
+package or in the agency package? Generally speaking, if the serializer is
+very generic, it should live in its respective resource package. If instead
+it's highly customized (and thus unlikely to be used by other resources), it
+should live with its nested resource.</p>
+<p>One annoyance with nested serializers is that, if doing a create/POST, DRF
+assumes that each nested resource should also be created. This causes validation
+errors to be raised when doing things like creating a new listing with an
+existing category, listing type, etc. The way around that problem is to
+explicitly remove all validation on any nested serializer fields that have
+unique constraints. For example, for a serializer with a <code>title</code> field:</p>
+<pre><code>extra_kwargs = {
+    'title': {'validators': []}
+}
+</code></pre>
+
+<p>Because we don't want to remove the validator for the base resource (only when
+it's used in a nested fashion), some of the more complicated resources (namely
+Listing) have lots of nested serializers that are identical to their non-nested
+counterparts save for the removal of the unique field validators</p>
+<h3 id="model-access-and-caching">Model Access and Caching</h3>
+<p><code>model_access.py</code> files should be used to encapsulate more complex database
+queries and business logic (as opposed to placing it in Views and Serializers).
+These methods are easier to use in sample data generators, easier to test,
+and allows the complexity of Django Rest Framework to stay largely separate
+from the core application logic</p>
+<p>Memcache is not currently used, but this is also the layer to implement
+object/query caching, such as:</p>
+<pre><code>data = cache.get('stuff')
+if data is None:
+    data = list(Stuff.objects.all())
+    cache.set('stuff', data)
+return data
+</code></pre>
+
+<p>Note that we also need logic to invalidate specific caches when resources are
+modified. For example, if a Listing is updated, all cached items referring/using
+that listing's data should be invalidated. By far and large, this logic is not
+yet in place, so enabling the cache will likely lead to unexpected results.
+In addition, the requirement to support 'tailored views' reduces the value
+of caching, since most queries must be filtered against a user's particular
+access controls</p>
+<h3 id="models">Models</h3>
+<p>Regarding <code>__str__()</code>:
+It’s important to add <code>__str__()</code> methods to your models, not only for your own
+convenience when dealing with the interactive prompt, but also because objects’
+representations are used throughout Django’s automatically-generated admin.
+Note that on Python 2, <code>__unicode__()</code> should be defined instead.</p>
+<p>By default, fields cannot be null or blank</p>
+<p>Some of the access control logic necessary to support tailored views lives
+in <code>models.py</code> as custom <code>models.Manager</code> classes (Reviews, Listings,
+ListingActivities, and Images)</p>
+<h3 id="views">Views</h3>
+<p>We generally prefer to
+use class-based views and <code>ViewSet</code>s (<code>ModelViewSet</code>s in particular) just
+because it's less code (assuming you don't require a significant amount of
+customization)</p>
+<p>The use of the convenience method <code>get_object_or_404</code> breaks the encapsulation
+of database queries in the <code>model_access</code> files (and prevents caching). That
+might be something to look at later on.</p>
+<h3 id="urls">URLs</h3>
+<p>All resource endpoints are defined in the resource's respective <code>urls.py</code> in
+<code>ozpcenter/api/</code>. <code>ozpcenter.urls</code> collects all of these endpoints, where they
+are given the <code>api/</code> prefix in the global <code>urls.py</code></p>
+<p>DRF uses a browsable API, meaning that you can go to
+<code>localhost:8000/api/metadata/</code> (for instance) in your browser. In general, the
+Swagger documentation is the recommended way to view and interact with the API.</p>
+<p>All URLs are currently set to use a trailing <code>/</code></p>
+<h3 id="authentication-and-authorization">Authentication and Authorization</h3>
+<h4 id="overview">Overview</h4>
+<p>Authentication and authorization is based on the default <code>django.contrib.auth</code>
+system built into Django, with numerous customizations.</p>
+<p>The default User model is extended by giving the <code>Profile</code> model a one-to-one
+relationship with the <code>django.contrib.auth.models.User</code> model, as described
+<a href="https://docs.djangoproject.com/en/1.8/topics/auth/customizing/#extending-the-existing-user-model">here</a></p>
+<p>The default <a href="https://docs.djangoproject.com/en/1.8/ref/contrib/auth/#user">User</a>
+model has the following fields:</p>
+<ul>
+<li>username</li>
+<li>first_name</li>
+<li>last_name</li>
+<li>email</li>
+<li>password</li>
+<li>groups (many-to-many relationship to Group)</li>
+<li>user_permissions (many-to-many relationship to Permission)</li>
+<li>is_staff (Boolean. Designates whether this user can access the admin site)</li>
+<li>is_active (Boolean. Designates whether this user account should be considered
+    active)</li>
+<li>is_superuser (Boolean. Designates that this user has all permissions without
+    explicitly assigning them)</li>
+<li>last_login (a datetime of the user's last login)</li>
+<li>date_joined (a datetime designating when the account was created)</li>
+</ul>
+<p>Of these fields:</p>
+<ul>
+<li>first_name and last_name are not used</li>
+<li>is_superuser is always set to False</li>
+<li>is_staff is set to True for Org Stewards and Apps Mall Stewards</li>
+<li>password is only used in development. On production, client SSL certs are
+    used, and so password is set to XXXXXXXX</li>
+</ul>
+<p><a href="https://docs.djangoproject.com/en/1.8/topics/auth/default/#groups">Groups</a> are
+used to categorize users as Users, Org Stewards, Apps Mall Stewards, etc. These
+groups are used to partially control access to various resources (for example,
+Users cannot make modifications to the Categories). That said, the majority
+of 'access control' cannot be accomplished by creating generic permissions
+and groups. For example, an Org Steward should be able to approve a Listing only
+for organizations to which they belong. Furthermore, any resources (Listings,
+Images) that have a specific access_control associated with them must be
+hidden from users (regardless of role/group) without the appropriate level
+of access.</p>
+<p>Django Permissions are used to control access to the Admin site. By default,
+add, change, and delete permissions are added to each model in the application.
+The notion of separate permissions for these three operations don't make much
+sense for this application - for now, the default permissions will be left
+alone, but the Permissions infrastructure won't be used much beyond that. As
+previously stated, it is not possible to create generic permissions that can
+be statically assigned to users, like 'can_approve_listing', since the
+allowance of such an action depends on the object (model instance), not just the
+model type. Therefore, custom object-level permissions will typically be used
+to control access to specific resource instances (for both read and write
+operations). For list queries where multiple resources are returned, these
+object-level permission checks are not used. Instead, filters and custom
+querysets are used to ensure only the appropriate data is returned.</p>
+<h4 id="authentication">Authentication</h4>
+<p>The app currently supports two forms of authentication - HTTP Basic Auth and
+PKI (client SSL authentication). HTTP Basic Auth is used for development
+purposes only. PKI authentication is implemented in <code>ozpcenter/auth/pkiauth.py</code>.
+The method of authentication to use is controlled by
+<code>REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES</code> in settings.py</p>
+<h3 id="tests">Tests</h3>
+<p>Generally speaking, each resource (listing, agency, profile, etc) may have
+two types of tests: business logic tests and API tests. The former typically
+tests code in <code>model_access.py</code> files, which is pure Python code and independent
+of Django or any "web stuff". The latter API tests, on the other hand, actually
+make HTTP requests using special testing clients and factories, and are more
+like end-to-end or integration tests</p>
+<h3 id="database">Database</h3>
+<p>System uses Postgres in Production and Sqlite3 in Development</p>
+<h3 id="api-documentation">API Documentation</h3>
+<p>There are a number of different documentation resources available, depending
+on what you're looking for.</p>
+<p>DRF's Web Browsable API can be accessed by entering an endpoint in the browser,
+for example, <code>&lt;rootUrl&gt;/api/profile/</code>.  Limitations:
+ * the API Root doesn't have a list of all endpoints, so you need to know
+ what you're looking for
+ * although these pages include forms that could potentially support POST
+ requests, they don't work very well, making the browsable API mostly useless
+ for non-GET requests</p>
+<p>Swagger docs are created via Django REST Swagger and served at
+ <code>&lt;rootUrl&gt;/docs/</code>. Swagger makes it easy to see all of the endpoints available.
+ Unlike the Browsable API docs, Swagger supports POST, PUT, and DELETE for most
+ of the endpoints as well. Limitations:
+  * POST api/image/ doesn't work from Swagger
+  * some of the more complicated endpoints (like POST api/listing/) might not
+  have forms that show all of the required and/or optional data that must or
+  could be included in the request</p>
+<p>Postman was used extensively during the API's development, and perhaps someday
+ a Postman Collection of requests will be added to this repo</p>
+<h3 id="logging">Logging</h3>
+<p>Currently, a single logger (<code>ozp-center</code>) is used throughout the application.
+See <code>settings.py</code> for details</p>
+<h3 id="static-and-media-files">Static and Media Files</h3>
+<p>Static files: JS, CSS, fonts, etc. Media files: images uploaded during app
+usage. Good explanation <a href="http://timmyomahony.com/blog/static-vs-media-and-root-vs-path-in-django/">here</a></p>
+<p>Static files include html/css/js for:
+ * Django admin site
+ * DRF Browsable API
+ * Swagger docs</p>
+<p>Media files (uploaded images) have associated access controls that require
+enforcement on a per-user basis. For that reason, media files are not served
+statically as they typically are, but instead served by the wsgi app itself</p>
+<h3 id="scripts">Scripts</h3>
+<p>The <code>runscript</code> command is installed via the django-extensions package and used
+to run scripts in the django context, just as you would get by running a set
+of commands in the shell using <code>python manage.py shell</code>. This can be used
+to run the script to populate the database with sample data:
+<code>python manage.py runscript sample_data_generator</code>. See the
+<a href="http://django-extensions.readthedocs.org/en/latest/runscript.html">docs</a> for
+details</p>
+<h3 id="api-input">API Input</h3>
+<p>All POST, PUT, and PATCH endpoints should use JSON encoded input as per
+<a href="http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#json-requests">this</a></p>
+<h3 id="django-admin-site">Django Admin Site</h3>
+<p>The admin site is currently enabled in development (but will likely be
+disabled in production). It is accessible by both Apps Mall Stewards and
+Org Stewards. It has a number of limitations, including the inability to upload
+images (since images aren't stored in the database), and the fact that many
+operations (like editing reviews, approving listings, etc) should result in
+additional operations (like creating ListingActivity entries), but using
+the Admin interface directly bypasses that logic</p>
+<h3 id="tracing-rest-call">Tracing REST Call</h3>
+<p>This section describes the life of a REST call.
+Developer should have knownledge of
+<em> <a href="https://docs.djangoproject.com/es/1.9/topics/http/urls/">Django's URL Dispatcher</a>
+</em> <a href="http://www.django-rest-framework.org/api-guide/viewsets/">Django Rest Framework's Viewsets</a>
+* <a href="http://www.django-rest-framework.org/api-guide/serializers/">Django Rest Framework's Serializer</a></p>
+<p>Example trace for a GET Request for getting a user's profile for an authenticated user
+<code>GET /api/self/profile</code>
+<em> Entry Point for all REST Calls - ozp/urls.py. All /api/</em> calls get re-routed to ozpcenter/urls.py file
+<em> ozpcenter/urls.py add REST access points for all the views for the resources (agency, category, etc...)
+  * This line of code <strong>url(r'', include('ozpcenter.api.profile.urls'))</strong> adds endpoints related to profile REST Calls
+</em> ozpcenter/api/profile/user.py - 'self/profile/' route points to current user's profile (Using CurrentUserViewSet in ozpcenter/api/profile/views.py)
+* ozpcenter/api/profile/views.py - For GET Request for this route it will call the 'retrieve' method
+  * Before allowing user to access the endpoint it will make sure user is authenticated and has the correct role using 'permission_classes = (permissions.IsUser,)'</p>
+<h2 id="controlling-access">Controlling Access</h2>
+<p>Anonymous users have no access - all must have a valid username/password (dev)
+or valid certificate (production) to be granted any access</p>
+<p>A few endpoints only provide READ access:</p>
+<ul>
+<li>storefront</li>
+<li>metadata</li>
+</ul>
+<p>Several resources allow global READ access with WRITE access restricted to
+Apps Mall Stewards:</p>
+<ul>
+<li>access_control</li>
+<li>agency</li>
+<li>category</li>
+<li>contact_type</li>
+<li>listing_type</li>
+</ul>
+<p><strong>image</strong></p>
+<ul>
+<li>global READ of metadata, but access_control enforcement on the images
+themselves</li>
+<li>WRITE access allowed for all users, but the associated access_control level
+    cannot exceed that of the current user</li>
+</ul>
+<p><strong>intent</strong></p>
+<ul>
+<li>global READ and WRITE allowed, but associated intent.icon.access_control
+    cannot exceed that of the current user</li>
+</ul>
+<p><strong>library</strong></p>
+<ul>
+<li>READ access for ORG stewards and above</li>
+<li>no WRITE access</li>
+<li>READ and WRITE access to /self/library for the current user</li>
+</ul>
+<p><strong>notification</strong></p>
+<ul>
+<li>global READ access</li>
+<li>WRITE access restricted to Org Stewards and above, unless the notification
+    is associated with a Listing owned by this user</li>
+<li>READ and WRITE access to /self/notification for the current user</li>
+</ul>
+<p><strong>profile</strong></p>
+<ul>
+<li>READ access restricted to Org Stewards and above</li>
+<li>WRITE access restricted to the associated user (users cannot create, modify,
+    or delete users other than themselves)</li>
+<li>READ and WRITE access to /self/profile for the current user</li>
+</ul>
+<p><strong>listing</strong></p>
+<ul>
+<li>READ access restricted by agency (if listing is private) and by access_control
+    level</li>
+<li>WRITE access:<ul>
+<li>global WRITE access to create/modify/delete a listing in the draft or
+    pending state ONLY</li>
+<li>Org Stewards and above can change the state to published/approved or
+    rejected, and change state to enabled/disabled, but must respect
+    Organization (an Org Steward cannot modify
+    a listing for which they are not the owner and/or not a member of
+    the listing's agency)</li>
+<li>global WRITE access to create/modify/delete reviews (item_comment) for
+    any listing (must respect organization (if private) and access_control)</li>
+</ul>
+</li>
+<li>READ access to /self/listing to return listings that current user owns (?)</li>
+</ul>
+<p><strong>Permission Types</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Permission Types</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">read</td>
+<td align="left">The Read permission refers to a user's capability to read the contents of the endpoint.</td>
+</tr>
+<tr>
+<td align="left">write</td>
+<td align="left">The Write permission refers to a user's capability to write contents to the endpoint.</td>
+</tr>
+<tr>
+<td align="left">access_control enforcement flag</td>
+<td align="left">access_control level cannot exceed that of the current user</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Access Control Matrix</strong>
+<table>
+    <tr>
+        <th>ozp-center</th>
+        <th colspan="5">Access Control</th>
+    </tr></p>
+<pre><code>&lt;tr&gt;
+    &lt;th&gt;Endpoint&lt;/th&gt;
+    &lt;th&gt;Anonymous Users&lt;/th&gt;
+    &lt;th&gt;Self&lt;/th&gt;
+    &lt;th&gt;Other&lt;/th&gt;
+    &lt;th&gt;Org Steward&lt;/th&gt;
+    &lt;th&gt;Apps Mall Steward &lt;/th&gt;
+    &lt;th&gt;Notes&lt;/th&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;access_control (?)&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;agency&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;category&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;contact_type&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;image (metadata)&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;rwa&lt;/td&gt;
+    &lt;td&gt;rwa&lt;/td&gt;
+    &lt;td&gt;rwa&lt;/td&gt;
+    &lt;td&gt;rwa&lt;/td&gt;
+    &lt;td&gt;Read: access_control enforcement on the images themselves, Write: associated access_control level cannot exceed that of the current user&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;intent&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;rwa&lt;/td&gt;
+    &lt;td&gt;rwa&lt;/td&gt;
+    &lt;td&gt;rwa&lt;/td&gt;
+    &lt;td&gt;rwa&lt;/td&gt;
+    &lt;td&gt;associated intent.icon.access_control cannot exceed that of the current user&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;library&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;library (self)&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;listing&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;r-a&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;listing (self)&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;listing_type (?)&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;notification&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;r--&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;profile&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;users cannot create, modify, or delete users other than themselves&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;profile (self route)&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;rw-&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;Self&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;storefront&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;R--&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;Get Storefront for current user&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;metadata&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;R--&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;---&lt;/td&gt;
+    &lt;td&gt;Get metadata for current user&lt;/td&gt;
+&lt;/tr&gt;
+</code></pre>
+</table>
+
+<h2 id="sample-users-for-basicauth">Sample Users for BasicAuth</h2>
+<p>By default, HTTP Basic Authentication is used for login. This can be changed
+to PKI (client certificates) by changing <code>REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES</code> in <code>settings.py</code></p>
+<p>Below are usernames that are part of our sample data (defined in
+<code>ozp-backend/ozpcenter/scripts/sample_data_generator.py</code>) (password for all users is <code>password</code>):</p>
+<p><strong>Admins:</strong>
+- bigbrother (minipax)
+- bigbrother2 (minitrue)
+- khaleesi (miniplen)</p>
+<p><strong>Org Stewards:</strong>
+- wsmith (minitrue, stewarded_orgs: minitrue)
+- julia (minitrue, stewarded_orgs: minitrue, miniluv)
+- obrien (minipax, stewarded_orgs: minipax, miniplenty)</p>
+<p><strong>Users:</strong>
+- aaronson (miniluv)
+- hodor (miniluv - PKI)
+- jones (minitrue)
+- tammy (minitrue - PKI)
+- rutherford (miniplenty)
+- noah (miniplenty - PKI)
+- syme (minipax)
+- abe (minipax - PKI)
+- tparsons (minipax, miniluv)
+- jsnow (minipax, miniluv - PKI)
+- charrington (minipax, miniluv, minitrue)
+- johnson (minipax, miniluv, minitrue - PKI)</p>
+<h2 id="domain-knowledge">Domain Knowledge</h2>
+<h3 id="the-life-of-a-submitted-listing">The life of a submitted listing</h3>
+<p>Description on how listings get submitted. API endpoint: <code>/api/listing</code>
+<em> User: A User submits a listing
+  * State
+    * User: Submitted Listing
+    * Org Steward: Needs Action (Approve Listing or return listing to user)
+    * Admin: Pending
+</em> Org Steward: An Org Steward will approve user's listing or return back to the user with a comment)
+  * State: If Approved
+    * User: Pending
+    * Org Steward: Org Approved
+    * Admin: Needs Action
+  * State: If Returned to the user
+    * User: Needs Action
+    * Org Steward: Returned
+    * Admin: Returned
+* Admin: An admin will approve or reject listing for a org
+  * State: If approved the listing will be published
+    * User: Done
+    * Org Steward: Org Approved
+    * Admin: Admin Approved (Listing Published)
+  * State: If rejected
+    * User: Needs Action
+    * Org Steward: Returned
+    * Admin: Returned</p>
+<pre><code>                           Submitted
+ +--------+                Listing     +---------------------+
+ |  USER  +-------------------------&gt;  |  ORG STEWARD/ADMIN  |
+ +---+----+                            +---+----+------------+
+     ^           Rejected Listing          |    |
+     +---------------------+---------------+    |
+                           ^                    |
+                           |          Approved  |
+                Approved   |          Listing   |
++-----------+   Listing   ++-------+            |
+|Published  | &lt;-----------+  ADMIN | &lt;----------+
++-----------+             +--------+
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="debugging/" class="btn btn-neutral float-right" title="Debugging">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+        <span style="margin-left: 15px"><a href="debugging/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="./js/theme.js"></script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 0.16.3
+Build Date UTC : 2017-10-03 19:51:07
+-->

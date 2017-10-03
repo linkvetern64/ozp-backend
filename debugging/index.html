@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Debugging - ozp-backend</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Debugging";
+    var mkdocs_page_input_path = "debugging.md";
+    var mkdocs_page_url = "/debugging/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> ozp-backend</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Debugging</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#performance-debugging">Performance Debugging</a></li>
+    
+
+    <li class="toctree-l2"><a href="#getting-all-profiles-without-any-optimizations">Getting all Profiles (without any optimizations)</a></li>
+    
+
+    <li class="toctree-l2"><a href="#getting-all-profiles-with-join">Getting all Profiles (with join)</a></li>
+    
+
+    <li class="toctree-l2"><a href="#debugging-storefront-serializer">Debugging Storefront Serializer</a></li>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">ozp-backend</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Debugging</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h4 id="performance-debugging">Performance Debugging</h4>
+<p>We check the performance of a Database model using shell_plus command for manage.py.</p>
+<pre><code class="shell">python manage.py shell_plus --print-sql
+</code></pre>
+
+<pre><code class="python"># Shell Plus Model Imports
+from corsheaders.models import CorsModel
+from django.contrib.admin.models import LogEntry
+from django.contrib.auth.models import Group, Permission, User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sessions.models import Session
+from ozpcenter.models import Agency, ApplicationLibraryEntry, Category, ChangeDetail, Contact, ContactType, DocUrl, Image, ImageType, Intent, Listing, ListingActivity, ListingType, Notification, Profile, Review, Screenshot, Tag
+from ozpiwc.models import DataResource
+# Shell Plus Django Imports
+from django.utils import timezone
+from django.conf import settings
+from django.core.cache import cache
+from django.core.urlresolvers import reverse
+from django.db.models import Avg, Count, F, Max, Min, Sum, Q, Prefetch
+from django.db import transaction
+Python 3.4.3 (default, Feb 25 2016, 10:08:19)
+[GCC 4.8.2] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+(InteractiveConsole)
+&gt;&gt;&gt;
+</code></pre>
+
+<h4 id="getting-all-profiles-without-any-optimizations">Getting all Profiles (without any optimizations)</h4>
+<pre><code class="python">&gt;&gt;&gt; Profile.objects.all()
+QUERY = 'SELECT &quot;ozpcenter_profile&quot;.&quot;id&quot;, &quot;ozpcenter_profile&quot;.&quot;display_name&quot;, &quot;ozpcenter_profile&quot;.&quot;bio&quot;, &quot;ozpcenter_profile&quot;.&quot;center_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;hud_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;webtop_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;dn&quot;, &quot;ozpcenter_profile&quot;.&quot;issuer_dn&quot;, &quot;ozpcenter_profile&quot;.&quot;auth_expires&quot;, &quot;ozpcenter_profile&quot;.&quot;access_control&quot;, &quot;ozpcenter_profile&quot;.&quot;user_id&quot; FROM &quot;ozpcenter_profile&quot; LIMIT 21' - PARAMS = ()
+
+Execution time: 0.000324s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (1,)
+
+Execution time: 0.000207s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (2,)
+
+Execution time: 0.000203s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (3,)
+
+Execution time: 0.000202s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (4,)
+
+Execution time: 0.000124s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (5,)
+
+Execution time: 0.000101s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (6,)
+
+Execution time: 0.000145s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (7,)
+
+Execution time: 0.000145s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (8,)
+
+Execution time: 0.000131s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (9,)
+
+Execution time: 0.000099s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (10,)
+
+Execution time: 0.000098s [Database: default]
+
+QUERY = 'SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;id&quot; = %s' - PARAMS = (11,)
+
+Execution time: 0.000096s [Database: default]
+
+[Profile: wsmith, Profile: julia, Profile: obrien, Profile: bigbrother, Profile: bigbrother2, Profile: aaronson, Profile: jones, Profile: rutherford, Profile: syme, Profile: tparsons, Profile: charrington]
+
+</code></pre>
+
+<p>Results:
+12 database calls ( 1 + num of user = Database calls)</p>
+<h4 id="getting-all-profiles-with-join">Getting all Profiles (with join)</h4>
+<pre><code class="python">&gt;&gt;&gt; Profile.objects.all().select_related('user')
+QUERY = 'SELECT &quot;ozpcenter_profile&quot;.&quot;id&quot;, &quot;ozpcenter_profile&quot;.&quot;display_name&quot;, &quot;ozpcenter_profile&quot;.&quot;bio&quot;, &quot;ozpcenter_profile&quot;.&quot;center_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;hud_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;webtop_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;dn&quot;, &quot;ozpcenter_profile&quot;.&quot;issuer_dn&quot;, &quot;ozpcenter_profile&quot;.&quot;auth_expires&quot;, &quot;ozpcenter_profile&quot;.&quot;access_control&quot;, &quot;ozpcenter_profile&quot;.&quot;user_id&quot;, &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;ozpcenter_profile&quot; LEFT OUTER JOIN &quot;auth_user&quot; ON ( &quot;ozpcenter_profile&quot;.&quot;user_id&quot; = &quot;auth_user&quot;.&quot;id&quot; ) LIMIT 21' - PARAMS = ()
+
+Execution time: 0.000472s [Database: default]
+
+[Profile: wsmith, Profile: julia, Profile: obrien, Profile: bigbrother, Profile: bigbrother2, Profile: aaronson, Profile: jones, Profile: rutherford, Profile: syme, Profile: tparsons, Profile: charrington]
+</code></pre>
+
+<p>Results:
+1 database call</p>
+<h4 id="debugging-storefront-serializer">Debugging Storefront Serializer</h4>
+<pre><code class="python">from rest_framework.response import Response
+import ozpcenter.api.storefront.model_access as ma
+import ozpcenter.api.storefront.serializers as se
+import timeit
+from django.test.client import RequestFactory
+
+rf = RequestFactory()
+get_request = rf.get('/hello/')
+
+data = ma.get_storefront('bigbrother') # Database calls
+sea = se.StorefrontSerializer(data,context={'request':get_request})
+start = timeit.timeit(); r= Response(sea.data) ; end = timeit.timeit() # Database calls
+print('Time: %s' % end)
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+
+</body>
+</html>
