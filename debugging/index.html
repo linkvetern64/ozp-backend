@@ -72,6 +72,22 @@
     </ul>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../domain_knowledge/">Domain knowledge</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Features</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../features/wiki/">Wiki</a>
+                </li>
+    </ul>
+	    </li>
+          
         </ul>
       </div>
       &nbsp;
@@ -104,7 +120,7 @@
           <div role="main">
             <div class="section">
               
-                <h4 id="performance-debugging">Performance Debugging</h4>
+                <h2 id="performance-debugging">Performance Debugging</h2>
 <p>We check the performance of a Database model using shell_plus command for manage.py.</p>
 <pre><code class="shell">python manage.py shell_plus --print-sql
 </code></pre>
@@ -131,7 +147,7 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 &gt;&gt;&gt;
 </code></pre>
 
-<h4 id="getting-all-profiles-without-any-optimizations">Getting all Profiles (without any optimizations)</h4>
+<h2 id="getting-all-profiles-without-any-optimizations">Getting all Profiles (without any optimizations)</h2>
 <pre><code class="python">&gt;&gt;&gt; Profile.objects.all()
 QUERY = 'SELECT &quot;ozpcenter_profile&quot;.&quot;id&quot;, &quot;ozpcenter_profile&quot;.&quot;display_name&quot;, &quot;ozpcenter_profile&quot;.&quot;bio&quot;, &quot;ozpcenter_profile&quot;.&quot;center_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;hud_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;webtop_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;dn&quot;, &quot;ozpcenter_profile&quot;.&quot;issuer_dn&quot;, &quot;ozpcenter_profile&quot;.&quot;auth_expires&quot;, &quot;ozpcenter_profile&quot;.&quot;access_control&quot;, &quot;ozpcenter_profile&quot;.&quot;user_id&quot; FROM &quot;ozpcenter_profile&quot; LIMIT 21' - PARAMS = ()
 
@@ -187,7 +203,7 @@ Execution time: 0.000096s [Database: default]
 
 <p>Results:
 12 database calls ( 1 + num of user = Database calls)</p>
-<h4 id="getting-all-profiles-with-join">Getting all Profiles (with join)</h4>
+<h2 id="getting-all-profiles-with-join">Getting all Profiles (with join)</h2>
 <pre><code class="python">&gt;&gt;&gt; Profile.objects.all().select_related('user')
 QUERY = 'SELECT &quot;ozpcenter_profile&quot;.&quot;id&quot;, &quot;ozpcenter_profile&quot;.&quot;display_name&quot;, &quot;ozpcenter_profile&quot;.&quot;bio&quot;, &quot;ozpcenter_profile&quot;.&quot;center_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;hud_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;webtop_tour_flag&quot;, &quot;ozpcenter_profile&quot;.&quot;dn&quot;, &quot;ozpcenter_profile&quot;.&quot;issuer_dn&quot;, &quot;ozpcenter_profile&quot;.&quot;auth_expires&quot;, &quot;ozpcenter_profile&quot;.&quot;access_control&quot;, &quot;ozpcenter_profile&quot;.&quot;user_id&quot;, &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;ozpcenter_profile&quot; LEFT OUTER JOIN &quot;auth_user&quot; ON ( &quot;ozpcenter_profile&quot;.&quot;user_id&quot; = &quot;auth_user&quot;.&quot;id&quot; ) LIMIT 21' - PARAMS = ()
 
@@ -198,7 +214,7 @@ Execution time: 0.000472s [Database: default]
 
 <p>Results:
 1 database call</p>
-<h4 id="debugging-storefront-serializer">Debugging Storefront Serializer</h4>
+<h2 id="debugging-storefront-serializer">Debugging Storefront Serializer</h2>
 <pre><code class="python">from rest_framework.response import Response
 import ozpcenter.api.storefront.model_access as ma
 import ozpcenter.api.storefront.serializers as se
@@ -219,6 +235,8 @@ print('Time: %s' % end)
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../domain_knowledge/" class="btn btn-neutral float-right" title="Domain knowledge">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -249,6 +267,8 @@ print('Time: %s' % end)
       
         <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../domain_knowledge/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

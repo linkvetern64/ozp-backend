@@ -70,8 +70,6 @@
         
             <li><a class="toctree-l3" href="#sample-users-for-basicauth">Sample Users for BasicAuth</a></li>
         
-            <li><a class="toctree-l3" href="#domain-knowledge">Domain Knowledge</a></li>
-        
         </ul>
     
 
@@ -81,6 +79,22 @@
             <li class="toctree-l1">
 		
     <a class="" href="debugging/">Debugging</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="domain_knowledge/">Domain knowledge</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Features</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="features/wiki/">Wiki</a>
+                </li>
+    </ul>
 	    </li>
           
         </ul>
@@ -121,10 +135,12 @@ to get OZP (Center, HUD, Webtop, IWC) up and running, see the
 <a href="https://github.com/ozone-development/ozp-ansible#quickstart">quickstart</a> of the <a href="https://github.com/ozone-development/ozp-ansible">ozp-ansible</a> project.</p>
 <h3 id="background">Background</h3>
 <p>ozp-backend replaces <a href="https://github.com/ozone-development/ozp-rest">ozp-rest</a>
-as the backend for Center, HUD, Webtop, and IWC. Notable differences include:
-<em> Python vs. Java/Groovy
-</em> Django, Django Rest Framework vs. Grails, JAX-RS
-* Postgres vs. MySQL</p>
+as the backend for Center, HUD, Webtop, and IWC. Notable differences include:</p>
+<ul>
+<li>Python vs. Java/Groovy</li>
+<li>Django, Django Rest Framework vs. Grails, JAX-RS</li>
+<li>Postgres vs. MySQL</li>
+</ul>
 <h2 id="3rd-party-services">3rd Party Services</h2>
 <p>Travis-CI
 <a href="https://travis-ci.org/ozone-development/ozp-backend"><img alt="Build Status" src="https://travis-ci.org/aml-development/ozp-backend.svg?branch=master" /></a></p>
@@ -705,66 +721,33 @@ themselves</li>
 to PKI (client certificates) by changing <code>REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES</code> in <code>settings.py</code></p>
 <p>Below are usernames that are part of our sample data (defined in
 <code>ozp-backend/ozpcenter/scripts/sample_data_generator.py</code>) (password for all users is <code>password</code>):</p>
-<p><strong>Admins:</strong>
-- bigbrother (minipax)
-- bigbrother2 (minitrue)
-- khaleesi (miniplen)</p>
-<p><strong>Org Stewards:</strong>
-- wsmith (minitrue, stewarded_orgs: minitrue)
-- julia (minitrue, stewarded_orgs: minitrue, miniluv)
-- obrien (minipax, stewarded_orgs: minipax, miniplenty)</p>
-<p><strong>Users:</strong>
-- aaronson (miniluv)
-- hodor (miniluv - PKI)
-- jones (minitrue)
-- tammy (minitrue - PKI)
-- rutherford (miniplenty)
-- noah (miniplenty - PKI)
-- syme (minipax)
-- abe (minipax - PKI)
-- tparsons (minipax, miniluv)
-- jsnow (minipax, miniluv - PKI)
-- charrington (minipax, miniluv, minitrue)
-- johnson (minipax, miniluv, minitrue - PKI)</p>
-<h2 id="domain-knowledge">Domain Knowledge</h2>
-<h3 id="the-life-of-a-submitted-listing">The life of a submitted listing</h3>
-<p>Description on how listings get submitted. API endpoint: <code>/api/listing</code>
-<em> User: A User submits a listing
-  * State
-    * User: Submitted Listing
-    * Org Steward: Needs Action (Approve Listing or return listing to user)
-    * Admin: Pending
-</em> Org Steward: An Org Steward will approve user's listing or return back to the user with a comment)
-  * State: If Approved
-    * User: Pending
-    * Org Steward: Org Approved
-    * Admin: Needs Action
-  * State: If Returned to the user
-    * User: Needs Action
-    * Org Steward: Returned
-    * Admin: Returned
-* Admin: An admin will approve or reject listing for a org
-  * State: If approved the listing will be published
-    * User: Done
-    * Org Steward: Org Approved
-    * Admin: Admin Approved (Listing Published)
-  * State: If rejected
-    * User: Needs Action
-    * Org Steward: Returned
-    * Admin: Returned</p>
-<pre><code>                           Submitted
- +--------+                Listing     +---------------------+
- |  USER  +-------------------------&gt;  |  ORG STEWARD/ADMIN  |
- +---+----+                            +---+----+------------+
-     ^           Rejected Listing          |    |
-     +---------------------+---------------+    |
-                           ^                    |
-                           |          Approved  |
-                Approved   |          Listing   |
-+-----------+   Listing   ++-------+            |
-|Published  | &lt;-----------+  ADMIN | &lt;----------+
-+-----------+             +--------+
-</code></pre>
+<p><strong>Admins:</strong>    </p>
+<ul>
+<li>bigbrother (minipax)</li>
+<li>bigbrother2 (minitrue)</li>
+<li>khaleesi (miniplen)</li>
+</ul>
+<p><strong>Org Stewards:</strong>    </p>
+<ul>
+<li>wsmith (minitrue, stewarded_orgs: minitrue)    </li>
+<li>julia (minitrue, stewarded_orgs: minitrue, miniluv)    </li>
+<li>obrien (minipax, stewarded_orgs: minipax, miniplenty)     </li>
+</ul>
+<p><strong>Users:</strong>    </p>
+<ul>
+<li>aaronson (miniluv)</li>
+<li>hodor (miniluv - PKI)</li>
+<li>jones (minitrue)</li>
+<li>tammy (minitrue - PKI)</li>
+<li>rutherford (miniplenty)</li>
+<li>noah (miniplenty - PKI)</li>
+<li>syme (minipax)</li>
+<li>abe (minipax - PKI)</li>
+<li>tparsons (minipax, miniluv)</li>
+<li>jsnow (minipax, miniluv - PKI)</li>
+<li>charrington (minipax, miniluv, minitrue)</li>
+<li>johnson (minipax, miniluv, minitrue - PKI)</li>
+</ul>
               
             </div>
           </div>
@@ -811,5 +794,5 @@ to PKI (client certificates) by changing <code>REST_FRAMEWORK.DEFAULT_AUTHENTICA
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-10-03 19:51:07
+Build Date UTC : 2017-10-03 20:45:54
 -->

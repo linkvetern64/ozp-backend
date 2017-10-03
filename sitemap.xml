@@ -17,4 +17,22 @@
     </url>
     
 
+    
+    <url>
+     <loc>/domain_knowledge/</loc>
+     <lastmod>2017-10-03</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+        
+    <url>
+     <loc>/features/wiki/</loc>
+     <lastmod>2017-10-03</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    
+
 </urlset>
