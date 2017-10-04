@@ -57,6 +57,11 @@
     <a class="" href="../debugging/">Debugging</a>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../developer/">Developer</a>
+	    </li>
+          
             <li class="toctree-l1 current">
 		
     <a class="current" href="./">Domain knowledge</a>
@@ -111,17 +116,20 @@
           <div role="main">
             <div class="section">
               
-                <h3 id="the-life-of-a-submitted-listing">The life of a submitted listing</h3>
-<p>Description on how listings get submitted. API endpoint: <code>/api/listing</code></p>
+                <h2 id="the-life-of-a-submitted-listing">The life of a submitted listing</h2>
+<p>Description on how listings get submitted.  <br />
+API endpoint: <code>/api/listing</code></p>
 <ul>
-<li>User: A User submits a listing    </li>
+<li>User: A User submits a listing    <ul>
 <li>State    <ul>
 <li>User: Submitted Listing    </li>
 <li>Org Steward: Needs Action (Approve Listing or return listing to user)    </li>
 <li>Admin: Pending    </li>
 </ul>
 </li>
-<li>Org Steward: An Org Steward will approve user's listing or return back to the user with a comment)    </li>
+</ul>
+</li>
+<li>Org Steward: An Org Steward will approve user's listing or return back to the user with a comment)    <ul>
 <li>State: If Approved    <ul>
 <li>User: Pending    </li>
 <li>Org Steward: Org Approved    </li>
@@ -134,7 +142,9 @@
 <li>Admin: Returned    </li>
 </ul>
 </li>
-<li>Admin: An admin will approve or reject listing for a org    </li>
+</ul>
+</li>
+<li>Admin: An admin will approve or reject listing for a org    <ul>
 <li>State: If approved the listing will be published   <ul>
 <li>User: Done    </li>
 <li>Org Steward: Org Approved    </li>
@@ -145,6 +155,8 @@
 <li>User: Needs Action    </li>
 <li>Org Steward: Returned   </li>
 <li>Admin: Returned    </li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -171,7 +183,7 @@
         <a href="../features/wiki/" class="btn btn-neutral float-right" title="Wiki">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../debugging/" class="btn btn-neutral" title="Debugging"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../developer/" class="btn btn-neutral" title="Developer"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -197,7 +209,7 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../debugging/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../developer/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../features/wiki/" style="color: #fcfcfc">Next &raquo;</a></span>

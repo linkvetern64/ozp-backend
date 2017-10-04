@@ -57,6 +57,9 @@
     <a class="current" href="./">Debugging</a>
     <ul class="subnav">
             
+    <li class="toctree-l2"><a href="#tracing-rest-call">Tracing REST Call</a></li>
+    
+
     <li class="toctree-l2"><a href="#performance-debugging">Performance Debugging</a></li>
     
 
@@ -70,6 +73,11 @@
     
 
     </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../developer/">Developer</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -120,7 +128,29 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="performance-debugging">Performance Debugging</h2>
+                <h2 id="tracing-rest-call">Tracing REST Call</h2>
+<p>This section describes the life of a REST call.  <br />
+Developer should have knownledge of</p>
+<ul>
+<li><a href="https://docs.djangoproject.com/es/1.9/topics/http/urls/">Django's URL Dispatcher</a></li>
+<li><a href="http://www.django-rest-framework.org/api-guide/viewsets/">Django Rest Framework's Viewsets</a></li>
+<li><a href="http://www.django-rest-framework.org/api-guide/serializers/">Django Rest Framework's Serializer</a></li>
+</ul>
+<p>Example trace for a GET Request for getting a user's profile for an authenticated user   <br />
+<code>GET /api/self/profile</code></p>
+<ul>
+<li>Entry Point for all REST Calls - ozp/urls.py. All /api/* calls get re-routed to ozpcenter/urls.py file    </li>
+<li>ozpcenter/urls.py add REST access points for all the views for the resources (agency, category, etc...)    <ul>
+<li>This line of code <code>url(r'', include('ozpcenter.api.profile.urls'))</code> adds endpoints related to profile REST Calls</li>
+</ul>
+</li>
+<li>ozpcenter/api/profile/user.py - 'self/profile/' route points to current user's profile (Using CurrentUserViewSet in ozpcenter/api/profile/views.py)</li>
+<li>ozpcenter/api/profile/views.py - For GET Request for this route it will call the 'retrieve' method<ul>
+<li>Before allowing user to access the endpoint it will make sure user is authenticated and has the correct role using 'permission_classes = (permissions.IsUser,)'</li>
+</ul>
+</li>
+</ul>
+<h2 id="performance-debugging">Performance Debugging</h2>
 <p>We check the performance of a Database model using shell_plus command for manage.py.</p>
 <pre><code class="shell">python manage.py shell_plus --print-sql
 </code></pre>
@@ -236,7 +266,7 @@ print('Time: %s' % end)
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../domain_knowledge/" class="btn btn-neutral float-right" title="Domain knowledge">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../developer/" class="btn btn-neutral float-right" title="Developer">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -268,7 +298,7 @@ print('Time: %s' % end)
         <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../domain_knowledge/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../developer/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
