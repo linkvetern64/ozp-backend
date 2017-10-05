@@ -66,16 +66,13 @@
         
             <li><a class="toctree-l3" href="#building-and-running-the-ozp-backend">Building and running the OZP backend</a></li>
         
+            <li><a class="toctree-l3" href="#makefile">MakeFile</a></li>
+        
+            <li><a class="toctree-l3" href="#postgres-setup">Postgres Setup</a></li>
+        
             <li><a class="toctree-l3" href="#local-development-method-minimal">Local development method (minimal)</a></li>
         
             <li><a class="toctree-l3" href="#ozp-ansible-method">ozp-ansible method</a></li>
-        
-        </ul>
-    
-
-    <li class="toctree-l2"><a href="#makefile">MakeFile</a></li>
-    
-        <ul>
         
             <li><a class="toctree-l3" href="#runing-elasticsearch-for-search">Runing Elasticsearch for Search</a></li>
         
@@ -187,6 +184,35 @@ source env/bin/activate
 make dev
 </code></pre>
 
+<h3 id="makefile">MakeFile</h3>
+<p>There is a MakeFile in the project to run repetitive commands    </p>
+<p>Commands:  <br />
+<code>make dev run</code> - Setup up the Development environment and run server on a SQLite Database (without Elasticsearch)<br />
+<code>make pyenv</code> - Create Python environment and install requirements  <br />
+<code>make dev</code> - Setup up the development environment running on a SQLite Database (without Elasticsearch)  <br />
+<code>make dev_psql</code> - Setup up the development environment running on a Postgres Database (without Elasticsearch)  <br />
+<code>make dev_es</code> - Setup up the development environment running on a SQLite Database with Elasticsearch)  <br />
+<code>make reindex_es</code> - Reindex the data into Elasticsearch  <br />
+<code>make run</code> - Run the server  <br />
+<code>make run_es</code> - Run the server with Elasticsearch  <br />
+<code>make rung</code> - Run Server with gunicorn with a worker per core  <br />
+<code>make test</code> - Run all test  <br />
+<code>make codecheck</code> - Run pycodestyle python linter on the code  <br />
+<code>make upgrade_requirements</code> - Update project python dependencies    </p>
+<h3 id="postgres-setup">Postgres Setup</h3>
+<p>Command to install postgresql (on Debian-based OS)</p>
+<pre><code>sudo apt-get install postgresql postgresql-contrib
+</code></pre>
+
+<p>Commands to setup postgresql for ozp-backend</p>
+<pre><code>sudo -i -u postgres
+createuser ozp_user
+psql -c 'ALTER USER ozp_user CREATEDB;'
+psql -c &quot;ALTER USER &quot;ozp_user&quot; WITH PASSWORD 'password';&quot;
+createdb ozp
+psql -c 'GRANT ALL PRIVILEGES ON DATABASE ozp TO ozp_user;'
+</code></pre>
+
 <h3 id="local-development-method-minimal">Local development method (minimal)</h3>
 <p>To serve the application on your host machine with minimal external dependencies,
 do the following:</p>
@@ -231,20 +257,6 @@ of this README, which will create a production-esque deployment of OZP:</p>
 <li>Enable HTTPS (via nginx reverse proxy)</li>
 <li>Served via Gunicorn (vs. Django development server)</li>
 </ul>
-<h2 id="makefile">MakeFile</h2>
-<p>There is a MakeFile in the project to run repetitive commands    </p>
-<p>Commands:  <br />
-<code>make pyenv</code> - Create Python environment and install requirements  <br />
-<code>make dev</code> - Setup up the development environment running on a SQLite Database (without Elasticsearch)  <br />
-<code>make dev_psql</code> - Setup up the development environment running on a Postgres Database (without Elasticsearch)  <br />
-<code>make dev_es</code> - Setup up the development environment running on a SQLite Database with Elasticsearch)  <br />
-<code>make reindex_es</code> - Reindex the data into Elasticsearch  <br />
-<code>make run</code> - Run the server  <br />
-<code>make run_es</code> - Run the server with Elasticsearch  <br />
-<code>make rung</code> - Run Server with gunicorn with a worker per core  <br />
-<code>make test</code> - Run all test  <br />
-<code>make codecheck</code> - Run pycodestyle python linter on the code  <br />
-<code>make upgrade_requirements</code> - Update project python dependencies    </p>
 <h3 id="runing-elasticsearch-for-search">Runing Elasticsearch for Search</h3>
 <p>ozp/Settings.py file variable needs to be updated to <code>ES_ENABLED = True</code>  <br />
 After installing Elasticsearch run <code>make reindex_es</code> and run <code>make run_es</code> in the ozp-backend folder while inside of your $env     </p>
@@ -615,5 +627,5 @@ This can be changed to PKI (client certificates) by changing <code>REST_FRAMEWOR
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-10-04 21:00:56
+Build Date UTC : 2017-10-05 13:22:37
 -->
