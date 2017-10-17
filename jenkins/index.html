@@ -233,17 +233,21 @@ Note:  Jenkins slave is not necessary    </p>
 </li>
 </ul>
 <h2 id="jenkins-jobs">Jenkins Jobs</h2>
-<p>There will be two jobs per git repo (release and latest)</p>
+<p>There will be 4 jobs per git repo (release and latest)</p>
 <p>Git Repos and Jobs names</p>
 <ul>
 <li>ozp-center<ul>
-<li>build-center-latest</li>
-<li>build-center-release</li>
+<li>center-latest-test</li>
+<li>center-latest-build</li>
+<li>center-release-test</li>
+<li>center-release-build</li>
 </ul>
 </li>
 <li>ozp-backend<ul>
-<li>build-backend-latest</li>
-<li>build-backend-release</li>
+<li>backend-latest-test</li>
+<li>backend-latest-build</li>
+<li>backend-release-test</li>
+<li>backend-release-build</li>
 </ul>
 </li>
 </ul>
@@ -280,7 +284,7 @@ Note:  Jenkins slave is not necessary    </p>
 <li>Branches to build: <code>*/master</code> , for release <code>*/tags/release/*</code></li>
 </ul>
 </li>
-<li>Under <code>Build Triggers</code>,<ul>
+<li>Under <code>Build Triggers</code> (Only for test jobs)<ul>
 <li>Select <code>GitHub hook trigger for GITScm polling</code></li>
 </ul>
 </li>
@@ -430,7 +434,7 @@ npm run tarDate
 </ul>
 <h3 id="setting-up-ozp-iwc-on-jenkins-ci">Setting up ozp-iwc on Jenkins CI</h3>
 <ul>
-<li>Create a new <code>freestyle project</code> called <code>build-iwc-latest</code> and <code>build-iwc-release</code></li>
+<li>Create a new <code>freestyle project</code> called <code>iwc-latest-build</code> and <code>iwc-release-build</code></li>
 <li>Under <code>Build</code><ul>
 <li>Execute Shell</li>
 </ul>
@@ -496,32 +500,15 @@ npm run test
 </li>
 </ul>
 <h3 id="setting-up-ozp-backend-on-jenkins-ci">Setting up ozp-backend on Jenkins CI</h3>
+<h4 id="build-jobs">Build jobs</h4>
 <ul>
-<li>Create a new <code>freestyle project</code> called <code>build-backend-latest</code> and <code>build-backend-release</code></li>
+<li>Create a new <code>freestyle project</code> called <code>backend-latest-build</code> and <code>backend-release-build</code></li>
 <li>Under <code>Build</code><ul>
 <li>Execute Shell</li>
 </ul>
 </li>
 </ul>
-<pre><code># create clean python env
-rm -rf ~/python_envs/ci-env/
-mkdir ~/python_envs/ci-env/
-pyvenv-3.4 ~/python_envs/ci-env/
-source ~/python_envs/ci-env/bin/activate
-# install prereqs (clean)
-pip install --upgrade pip
-# this is super sketchy, but without it, psycopg2 will fail to install (won't be
-# able to find lib2to3 stuff)
-# /opt/lib2to3 was copied from a clean Python-3.4.3 build (Lib directory)
-cp -r /opt/lib2to3 ~/python_envs/ci-env/lib/python3.4/site-packages/
-export PATH=/usr/local/pgsql/bin:$PATH
-pip install -r requirements.txt --no-cache-dir -I
-
-# Install Wheel in the env
-pip install wheel
-
-# make the release
-python release.py --no-version
+<pre><code>sh jenkins/build.sh
 </code></pre>
 
 <ul>
@@ -530,6 +517,28 @@ python release.py --no-version
 <li>Send build artifacts over ssh<ul>
 <li>SSH Server Name: <code>ci-latest.proj.domain.com</code></li>
 <li>Exec command: <code>sudo /home/jenkins/ozp_deploy.sh ${JOB_NAME} ${BUILD_NUMBER} --es_enabled=True</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="test-jobs">Test jobs</h4>
+<ul>
+<li>Create a new <code>freestyle project</code> called <code>backend-latest-test</code> and <code>backend-release-test</code></li>
+<li>Under <code>Build</code><ul>
+<li>Execute Shell</li>
+</ul>
+</li>
+</ul>
+<pre><code>sh jenkins/test.sh
+</code></pre>
+
+<ul>
+<li>Under <code>Post-build Actions</code><ul>
+<li><code>Archive the archive</code>,  File to archive: <code>ozp.log</code></li>
+<li><code>Build Other Projects</code>=<code>build-backend-latest</code>, Trigger only if build is stable</li>
+<li><code>Publish HTML Report</code><ul>
+<li><code>HTML directory to archive</code>: cover</li>
 </ul>
 </li>
 </ul>

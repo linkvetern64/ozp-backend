@@ -172,9 +172,8 @@ as the backend for Center, HUD, Webtop, and IWC.     </p>
 <li>Postgres vs. MySQL</li>
 </ul>
 <h2 id="3rd-party-services">3rd Party Services</h2>
-<p>Project relays on
-Travis-CI
-<a href="https://travis-ci.org/ozone-development/ozp-backend"><img alt="Build Status" src="https://travis-ci.org/aml-development/ozp-backend.svg?branch=master" /></a></p>
+<p>Project relays on  <br />
+Travis-CI  <a href="https://travis-ci.org/aml-development/ozp-backend"><img alt="Build Status" src="https://travis-ci.org/aml-development/ozp-backend.svg?branch=master" /></a></p>
 <h2 id="getting-started">Getting Started</h2>
 <h3 id="development-environment-preparation">Development environment preparation</h3>
 <pre><code>cd ~
@@ -196,18 +195,23 @@ make dev
 
 <h3 id="makefile">MakeFile</h3>
 <p>There is a MakeFile in the project to run repetitive commands    </p>
-<p>Commands:  <br />
-<code>make dev run</code> - Setup up the Development environment and run server on a SQLite Database (without Elasticsearch)<br />
+<p><strong>Commands to setup server</strong>  <br />
 <code>make pyenv</code> - Create Python environment and install requirements  <br />
-<code>make dev</code> - Setup up the development environment running on a SQLite Database (without Elasticsearch)  <br />
-<code>make dev_psql</code> - Setup up the development environment running on a Postgres Database (without Elasticsearch)  <br />
-<code>make dev_es</code> - Setup up the development environment running on a SQLite Database with Elasticsearch)  <br />
-<code>make reindex_es</code> - Reindex the data into Elasticsearch  <br />
+<code>make dev run</code> - Setup up the Development environment and run server on a SQLite Database without Elasticsearch  <br />
+<code>make dev</code> - Setup up the development environment running on a SQLite Database without Elasticsearch  <br />
+<code>make dev_psql</code> - Setup up the development environment running on a Postgres Database without Elasticsearch  <br />
+<code>make dev_es</code> - Setup up the development environment running on a SQLite Database with Elasticsearch   <br />
+<code>make reindex_es</code> - Reindex the data into Elasticsearch    </p>
+<p><strong>Commands to run server</strong>  <br />
 <code>make run</code> - Run the server  <br />
 <code>make run_es</code> - Run the server with Elasticsearch  <br />
 <code>make rung</code> - Run Server with gunicorn with a worker per core  <br />
+<code>make rung_es</code> - Run Server with gunicorn with a worker per core  <br />
 <code>make test</code> - Run all test  <br />
+<code>make ptest</code> - Run all test in parallel (increase speed of unit tests)</p>
+<p><strong>Commands server</strong>  <br />
 <code>make codecheck</code> - Run pycodestyle python linter on the code  <br />
+<code>make autopep</code> - Run tool to fix python code  <br />
 <code>make upgrade_requirements</code> - Update project python dependencies    </p>
 <h3 id="postgres-setup">Postgres Setup</h3>
 <p>Command to install postgresql (on Debian-based OS)</p>
@@ -637,5 +641,5 @@ This can be changed to PKI (client certificates) by changing <code>REST_FRAMEWOR
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-10-17 17:49:21
+Build Date UTC : 2017-10-17 19:14:45
 -->
