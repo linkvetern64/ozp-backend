@@ -77,6 +77,17 @@
     <li class="toctree-l2"><a href="#debugging-storefront-serializer">Debugging Storefront Serializer</a></li>
     
 
+    <li class="toctree-l2"><a href="#improving-put_counts_in_listings_endpoint-database-example">Improving put_counts_in_listings_endpoint database example</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#put_counts_in_listings_endpoint-function-results">put_counts_in_listings_endpoint function results</a></li>
+        
+            <li><a class="toctree-l3" href="#put_counts_in_listings_endpoint_new-function-results">put_counts_in_listings_endpoint_new function results</a></li>
+        
+        </ul>
+    
+
     </ul>
 	    </li>
           
@@ -268,6 +279,261 @@ data = ma.get_storefront('bigbrother') # Database calls
 sea = se.StorefrontSerializer(data,context={'request':get_request})
 start = timeit.timeit(); r= Response(sea.data) ; end = timeit.timeit() # Database calls
 print('Time: %s' % end)
+</code></pre>
+
+<h2 id="improving-put_counts_in_listings_endpoint-database-example">Improving <code>put_counts_in_listings_endpoint</code> database example</h2>
+<pre><code>import time
+from django.db import transaction
+
+
+def show_db_calls(print_queries=False):
+    db_connection = transaction.get_connection()
+    number_of_calls = len(db_connection.queries)
+    if print_queries:
+        [print(query) for query in db_connection.queries]
+
+    db_connection.queries_log.clear()
+    return number_of_calls
+
+
+def group_by_sum(count_data_list, group_key, count_key='agency_count'):
+    &quot;&quot;&quot;
+    { &quot;agency__id&quot;: 1, &quot;agency_count&quot;: 39, &quot;approval_status&quot;: &quot;APPROVED&quot;, &quot;is_enabled&quot;: true},
+
+    returns
+        dict
+    &quot;&quot;&quot;
+    count_dict = {}
+
+    for record_dict in count_data_list:
+        group_key_in_record = group_key in record_dict
+
+        if group_key_in_record:
+            group_key_value = record_dict[group_key]
+            group_key_count_value = record_dict[count_key]
+            group_key_value_in_count_dict = group_key_value in count_dict
+
+            if group_key_value_in_count_dict:
+                count_dict[group_key_value] = count_dict[group_key_value] + group_key_count_value
+            else:
+                count_dict[group_key_value] = group_key_count_value
+
+    total_count = 0
+
+    for key in count_dict:
+        value = count_dict[key]
+        total_count = total_count + value
+
+    count_dict['_total_count'] = total_count
+
+    return count_dict
+
+
+def put_counts_in_listings_endpoint_new(queryset):
+    &quot;&quot;&quot;
+    Add counts to the listing/ endpoint
+
+    Args:
+        querset: models.Listing queryset
+
+    Returns:
+        {
+            total&quot;: &lt;total listings&gt;,
+            organizations: {
+                &lt;org_id&gt;: &lt;int&gt;,
+                ...
+            },
+            enabled: &lt;enabled listings&gt;,
+            IN_PROGRESS: &lt;int&gt;,
+            PENDING: &lt;int&gt;,
+            PENDING_DELETION: &lt;int&gt;&quot;
+            REJECTED: &lt;int&gt;,
+            APPROVED_ORG: &lt;int&gt;,
+            APPROVED: &lt;int&gt;,
+            DELETED: &lt;int&gt;
+        }
+    &quot;&quot;&quot;
+    show_db_calls()
+    start_time = int(round(time.time() * 1000))
+    data = {}
+
+    count_data = (models.Listing
+                        .objects.filter(pk__in=queryset)
+                        .values('agency__id','is_enabled', 'approval_status')
+                        .annotate(agency_count=Count('agency__id')))
+
+    enabled_count = group_by_sum(count_data, 'is_enabled')
+
+    data['total'] = enabled_count.get('_total_count', 0)
+    data['enabled'] = enabled_count.get(True, 0)
+
+    agency_count = group_by_sum(count_data, 'agency__id')
+
+    data['organizations'] = {}
+
+    agency_ids = list(models.Agency.objects.values_list('id', flat=True))
+    for agency_id in agency_ids:
+        agency_id_str = str(agency_id)
+        if agency_id in agency_count:
+            data['organizations'][agency_id_str] = agency_count[agency_id]
+        else:
+            data['organizations'][agency_id_str] = '0'
+
+    approval_status_count = group_by_sum(count_data, 'approval_status')
+    approval_status_list = [
+        models.Listing.IN_PROGRESS,
+        models.Listing.PENDING,
+        models.Listing.REJECTED,
+        models.Listing.APPROVED_ORG,
+        models.Listing.APPROVED,
+        models.Listing.DELETED,
+        models.Listing.PENDING_DELETION
+    ]
+
+    for current_approval_status in approval_status_list:
+        data[current_approval_status] = approval_status_count.get(current_approval_status, 0)
+
+    data['_time'] = int(round(time.time() * 1000)) - start_time
+    data['_db_calls'] = show_db_calls()
+    return data
+
+
+def put_counts_in_listings_endpoint(queryset):
+    &quot;&quot;&quot;
+    Add counts to the listing/ endpoint
+
+    Args:
+        querset: models.Listing queryset
+
+    Returns:
+        {
+            total&quot;: &lt;total listings&gt;,
+            organizations: {
+                &lt;org_id&gt;: &lt;int&gt;,
+                ...
+            },
+            enabled: &lt;enabled listings&gt;,
+            IN_PROGRESS: &lt;int&gt;,
+            PENDING: &lt;int&gt;,
+            PENDING_DELETION: &lt;int&gt;&quot;
+            REJECTED: &lt;int&gt;,
+            APPROVED_ORG: &lt;int&gt;,
+            APPROVED: &lt;int&gt;,
+            DELETED: &lt;int&gt;
+        }
+    &quot;&quot;&quot;
+    show_db_calls()
+    start_time = int(round(time.time() * 1000))
+    # TODO: Take in account 2pki user (rivera-20160908)
+
+    data = {}
+
+    # Number of total listings
+    num_total = queryset.count()
+    # Number of listing that is Enabled
+    num_enabled = queryset.filter(is_enabled=True).count()
+
+    # Number of listing that is IN_PROGRESS
+    num_in_progress = queryset.filter(
+        approval_status=models.Listing.IN_PROGRESS).count()
+
+    # Number of listing that is PENDING
+    num_pending = queryset.filter(
+        approval_status=models.Listing.PENDING).count()
+
+    # Number of listing that is REJECTED
+    num_rejected = queryset.filter(
+        approval_status=models.Listing.REJECTED).count()
+
+    # Number of listing that is APPROVED_ORG
+    num_approved_org = queryset.filter(
+        approval_status=models.Listing.APPROVED_ORG).count()
+
+    # Number of listing that is APPROVED
+    num_approved = queryset.filter(
+        approval_status=models.Listing.APPROVED).count()
+
+    # Number of listing that is DELETED
+    num_deleted = queryset.filter(
+        approval_status=models.Listing.DELETED).count()
+
+    # Number of listing that is PENDING_DELETION
+    num_pending_deletion = queryset.filter(
+        approval_status=models.Listing.PENDING_DELETION).count()
+
+    data['total'] = num_total
+    data['enabled'] = num_enabled
+    data['organizations'] = {}
+    data[models.Listing.IN_PROGRESS] = num_in_progress
+    data[models.Listing.PENDING] = num_pending
+    data[models.Listing.REJECTED] = num_rejected
+    data[models.Listing.APPROVED_ORG] = num_approved_org
+    data[models.Listing.APPROVED] = num_approved
+    data[models.Listing.DELETED] = num_deleted
+    data[models.Listing.PENDING_DELETION] = num_pending_deletion
+
+    orgs = models.Agency.objects.all()
+    for i in orgs:
+        data['organizations'][str(i.id)] = queryset.filter(
+            agency__id=i.id).count()
+
+    data['_time'] = int(round(time.time() * 1000)) - start_time
+    data['_db_calls'] = show_db_calls()
+    return data
+</code></pre>
+
+<h3 id="put_counts_in_listings_endpoint-function-results">put_counts_in_listings_endpoint function results</h3>
+<pre><code>{
+    &quot;APPROVED_ORG&quot;: 0,
+    &quot;IN_PROGRESS&quot;: 0,
+    &quot;DELETED&quot;: 0,
+    &quot;PENDING&quot;: 0,
+    &quot;organizations&quot;: {
+        &quot;1&quot;: 2,
+        &quot;2&quot;: 1,
+        &quot;3&quot;: 0,
+        &quot;4&quot;: 0,
+        &quot;5&quot;: 0,
+        &quot;6&quot;: 0,
+        &quot;7&quot;: 0,
+        &quot;8&quot;: 0,
+        &quot;9&quot;: 0
+    },
+    &quot;total&quot;: 3,
+    &quot;_time&quot;: 97,
+    &quot;enabled&quot;: 3,
+    &quot;PENDING_DELETION&quot;: 0,
+    &quot;REJECTED&quot;: 0,
+    &quot;_db_calls&quot;: 19,
+    &quot;APPROVED&quot;: 3
+}
+</code></pre>
+
+<h3 id="put_counts_in_listings_endpoint_new-function-results">put_counts_in_listings_endpoint_new function results</h3>
+<pre><code>{
+   &quot;APPROVED_ORG&quot;: 0,
+   &quot;IN_PROGRESS&quot;: 0,
+   &quot;DELETED&quot;: 0,
+   &quot;PENDING&quot;: 0,
+   &quot;organizations&quot;: {
+       &quot;1&quot;: 2,
+       &quot;2&quot;: 1,
+       &quot;3&quot;: 0,
+       &quot;4&quot;: 0,
+       &quot;5&quot;: 0,
+       &quot;6&quot;: 0,
+       &quot;7&quot;: 0,
+       &quot;8&quot;: 0,
+       &quot;9&quot;: 0
+   },
+   &quot;total&quot;: 3,
+   &quot;_time&quot;: 7,
+   &quot;enabled&quot;: 3,
+   &quot;PENDING_DELETION&quot;: 0,
+   &quot;REJECTED&quot;: 0,
+   &quot;_db_calls&quot;: 2,
+   &quot;APPROVED&quot;: 3
+}
 </code></pre>
               
             </div>
