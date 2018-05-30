@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Wiki - ozp-backend</title>
+  <title>Shared folders 2018 - ozp-backend</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Wiki";
-    var mkdocs_page_input_path = "features/wiki.md";
-    var mkdocs_page_url = "/features/wiki/";
+    var mkdocs_page_name = "Shared folders 2018";
+    var mkdocs_page_input_path = "features/shared_folders_2018.md";
+    var mkdocs_page_url = "/features/shared_folders_2018/";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -94,23 +94,35 @@
                     
     <a class="" href="../recommender_2017/">Recommender 2017</a>
                 </li>
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../shared_folders_2018/">Shared folders 2018</a>
+    <a class="current" href="./">Shared folders 2018</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#business-objective">Business Objective</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#requirements">Requirements</a></li>
+        
+            <li><a class="toctree-l4" href="#api">API</a></li>
+        
+            <li><a class="toctree-l4" href="#database-structure">Database Structure</a></li>
+        
+            <li><a class="toctree-l4" href="#links">Links</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
     <a class="" href="../smart_search/">Smart search</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Wiki</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#features">Features</a></li>
-    
-
-    </ul>
+    <a class="" href="../wiki/">Wiki</a>
                 </li>
     </ul>
 	    </li>
@@ -141,7 +153,7 @@
         
       
     
-    <li>Wiki</li>
+    <li>Shared folders 2018</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -151,10 +163,40 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="features">Features</h2>
-<p><a href="https://github.com/aml-development/ozp-documentation/wiki/Smart-Search-%282017%29">Smart Search</a>  <br />
-<a href="https://github.com/aml-development/ozp-documentation/wiki/Recommender-%282017%29">Recommender</a>  <br />
-<a href="https://github.com/aml-development/ozp-documentation/wiki/Notifications">Notifications</a>    </p>
+                <h1 id="business-objective">Business Objective</h1>
+<p>Add support for sharable folders</p>
+<h2 id="requirements">Requirements</h2>
+<p>We want to allow users to share a folder that is maintained by one or more users (owner/admin).</p>
+<p>Owners and Viewers are two different user type</p>
+<p>When the folder is updated by any owner, the folder updates are visible to all users.</p>
+<p>Send notification for shared folder updates to all owners/viewers</p>
+<p>The folder should have 'owners' who can modify the folder, add other owners, delete delete owners, change permissions, should see user management component.</p>
+<p>The folder should have 'viewers' that can only view, but not edit, the folder, should not see user management component</p>
+<p>The UI component, when available, would let the folder creator select users to share to, and set their permissions (similar in the way google sheets/docs sharing works).</p>
+<p>We will also maintain the concept of a copied folder, but will also add a true 'shared' folder.</p>
+<p>Regular Folder, Duplicate Folder, Shared Folder  are the different types of folder</p>
+<h3 id="acceptance-criteria">Acceptance Criteria</h3>
+<p>A new type of bookmark folder is available in the backend, that has permissions associated with it (view/edit)</p>
+<h2 id="api">API</h2>
+<h3 id="operations">operations</h3>
+<ul>
+<li>bookmark</li>
+<li>create - POST: /api/bookmarks - create bookmark listing</li>
+<li>list - GET: /api/bookmarks/?filters=type:FOLDER - list all bookmarks (folders/shared folders)</li>
+<li>folder</li>
+<li>create - POST /api/bookmarks/?filters=type:LISTING - create bookmark folder
+  *</li>
+</ul>
+<h2 id="database-structure">Database Structure</h2>
+<h3 id="method-1-relational-self-reference">Method 1 - Relational self-reference</h3>
+<h3 id="method-2-relational-normalized">Method 2 - Relational normalized</h3>
+<h2 id="links">Links</h2>
+<ul>
+<li>https://stackoverflow.com/questions/9736548/database-schema-how-the-relationship-can-be-designed-between-user-file-and-fol</li>
+<li>https://doc.owncloud.org/server/latest/developer_manual/core/ocs-share-api.html#ocs-share-api-create-share-response-attributes</li>
+<li>https://docs.datastax.com/en/playlist/doc/java/playlistArchitecture.html</li>
+<li>https://developers.google.com/drive/api/v3/about-files</li>
+</ul>
               
             </div>
           </div>
@@ -162,8 +204,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../smart_search/" class="btn btn-neutral float-right" title="Smart search">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-        <a href="../smart_search/" class="btn btn-neutral" title="Smart search"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+        <a href="../recommender_2017/" class="btn btn-neutral" title="Recommender 2017"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -189,8 +233,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../smart_search/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../recommender_2017/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../smart_search/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

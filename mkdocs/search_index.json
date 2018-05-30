@@ -327,7 +327,7 @@
         },
         {
             "location": "/requirements/",
-            "text": "Backend High-level requirements\n\n Provide REST Interface\n\n Unit Testing with Coverage Report\n\n Request/Object Validation\n\n Swagger Like Docs\n\n Authentication (PKI, Json Web Token)\n\n Plugins (Access Control 3rd Party, Authorization 3rd Party, anonymize_identifiable_data)\n\n Documentation\n\n Good Logging, ouput to json\n\n Migration Scripts (to keep db consistent)\n\n File Storage Central Library with support for local storage and S3\n\n Role-Based Permissions\n\n Support for many types of notifications\n\n Support for Elasticsearch 2.x (used in search)\n\n Support for Emailing\n\n Consistent Errors\n\n Protect against well known vulnerabilities\n\n Production Http Server (Gunicorn/nodemon)\n\n Offline Deployment\n\n Run Recommendation Algorithm\n\n Ansible Scripts\n* Works with Jenkins/TravisCI for builds/testing\n\n\nFuture Backend High-level requirements\n\n Support for Task Manager/Message Queue (Celery)\n\n Support Elasticsearch 6.x",
+            "text": "Backend High-level requirements\n\n\n\n\nProvide REST Interface\n\n\nUnit Testing with Coverage Report\n\n\nRequest/Object Validation\n\n\nSwagger Like Docs\n\n\nAuthentication (PKI, Json Web Token)\n\n\nPlugins (Access Control 3rd Party, Authorization 3rd Party, anonymize_identifiable_data)\n\n\nDocumentation\n\n\nGood Logging, ouput to json\n\n\nMigration Scripts (to keep db consistent)\n\n\nFile Storage Central Library with support for local storage and S3\n\n\nRole-Based Permissions\n\n\nSupport for many types of notifications\n\n\nSupport for Elasticsearch 2.x (used in search)\n\n\nSupport for Emailing\n\n\nConsistent Errors\n\n\nProtect against well known vulnerabilities\n\n\nProduction Http Server (Gunicorn/nodemon)\n\n\nOffline Deployment\n\n\nRun Recommendation Algorithm\n\n\nAnsible Scripts\n\n\nWorks with Jenkins/TravisCI for builds/testing\n\n\n\n\nFuture Backend High-level requirements\n\n\n\n\nSupport for Task Manager/Message Queue (Celery)\n\n\nSupport Elasticsearch 6.x",
             "title": "Requirements"
         },
         {
@@ -629,6 +629,56 @@
             "location": "/features/recommender_2017/#sites",
             "text": "https://neo4j.com/developer/guide-build-a-recommendation-engine/  http://datascience.stackexchange.com/questions/8705/collaborative-filtering-using-graph-and-machine-learning  http://mikelam.azurewebsites.net/beer-recommendations-with-user-based-collaborative-filtering/  http://docs.celeryproject.org/en/latest/userguide/periodic-tasks.html  We could use celery for task scheduling and running the recommendation algorithm.  https://realpython.com/blog/python/asynchronous-tasks-with-django-and-celery/  is a good starting guide  http://opensourceconnections.com/blog/2016/06/06/recommender-systems-101-basket-analysis/ good general site for Basket Analysis technique  http://opensourceconnections.com/blog/2016/09/09/better-recsys-elasticsearch/ How to build a good recommendation engine using Elasticsearch",
             "title": "Sites"
+        },
+        {
+            "location": "/features/shared_folders_2018/",
+            "text": "Business Objective\n\n\nAdd support for sharable folders\n\n\nRequirements\n\n\nWe want to allow users to share a folder that is maintained by one or more users (owner/admin).\n\n\nOwners and Viewers are two different user type\n\n\nWhen the folder is updated by any owner, the folder updates are visible to all users.\n\n\nSend notification for shared folder updates to all owners/viewers\n\n\nThe folder should have 'owners' who can modify the folder, add other owners, delete delete owners, change permissions, should see user management component.\n\n\nThe folder should have 'viewers' that can only view, but not edit, the folder, should not see user management component\n\n\nThe UI component, when available, would let the folder creator select users to share to, and set their permissions (similar in the way google sheets/docs sharing works).\n\n\nWe will also maintain the concept of a copied folder, but will also add a true 'shared' folder.\n\n\nRegular Folder, Duplicate Folder, Shared Folder  are the different types of folder\n\n\nAcceptance Criteria\n\n\nA new type of bookmark folder is available in the backend, that has permissions associated with it (view/edit)\n\n\nAPI\n\n\noperations\n\n\n\n\nbookmark\n\n\ncreate - POST: /api/bookmarks - create bookmark listing\n\n\nlist - GET: /api/bookmarks/?filters=type:FOLDER - list all bookmarks (folders/shared folders)\n\n\nfolder\n\n\ncreate - POST /api/bookmarks/?filters=type:LISTING - create bookmark folder\n  *\n\n\n\n\nDatabase Structure\n\n\nMethod 1 - Relational self-reference\n\n\nMethod 2 - Relational normalized\n\n\nLinks\n\n\n\n\nhttps://stackoverflow.com/questions/9736548/database-schema-how-the-relationship-can-be-designed-between-user-file-and-fol\n\n\nhttps://doc.owncloud.org/server/latest/developer_manual/core/ocs-share-api.html#ocs-share-api-create-share-response-attributes\n\n\nhttps://docs.datastax.com/en/playlist/doc/java/playlistArchitecture.html\n\n\nhttps://developers.google.com/drive/api/v3/about-files",
+            "title": "Shared folders 2018"
+        },
+        {
+            "location": "/features/shared_folders_2018/#business-objective",
+            "text": "Add support for sharable folders",
+            "title": "Business Objective"
+        },
+        {
+            "location": "/features/shared_folders_2018/#requirements",
+            "text": "We want to allow users to share a folder that is maintained by one or more users (owner/admin).  Owners and Viewers are two different user type  When the folder is updated by any owner, the folder updates are visible to all users.  Send notification for shared folder updates to all owners/viewers  The folder should have 'owners' who can modify the folder, add other owners, delete delete owners, change permissions, should see user management component.  The folder should have 'viewers' that can only view, but not edit, the folder, should not see user management component  The UI component, when available, would let the folder creator select users to share to, and set their permissions (similar in the way google sheets/docs sharing works).  We will also maintain the concept of a copied folder, but will also add a true 'shared' folder.  Regular Folder, Duplicate Folder, Shared Folder  are the different types of folder",
+            "title": "Requirements"
+        },
+        {
+            "location": "/features/shared_folders_2018/#acceptance-criteria",
+            "text": "A new type of bookmark folder is available in the backend, that has permissions associated with it (view/edit)",
+            "title": "Acceptance Criteria"
+        },
+        {
+            "location": "/features/shared_folders_2018/#api",
+            "text": "",
+            "title": "API"
+        },
+        {
+            "location": "/features/shared_folders_2018/#operations",
+            "text": "bookmark  create - POST: /api/bookmarks - create bookmark listing  list - GET: /api/bookmarks/?filters=type:FOLDER - list all bookmarks (folders/shared folders)  folder  create - POST /api/bookmarks/?filters=type:LISTING - create bookmark folder\n  *",
+            "title": "operations"
+        },
+        {
+            "location": "/features/shared_folders_2018/#database-structure",
+            "text": "",
+            "title": "Database Structure"
+        },
+        {
+            "location": "/features/shared_folders_2018/#method-1-relational-self-reference",
+            "text": "",
+            "title": "Method 1 - Relational self-reference"
+        },
+        {
+            "location": "/features/shared_folders_2018/#method-2-relational-normalized",
+            "text": "",
+            "title": "Method 2 - Relational normalized"
+        },
+        {
+            "location": "/features/shared_folders_2018/#links",
+            "text": "https://stackoverflow.com/questions/9736548/database-schema-how-the-relationship-can-be-designed-between-user-file-and-fol  https://doc.owncloud.org/server/latest/developer_manual/core/ocs-share-api.html#ocs-share-api-create-share-response-attributes  https://docs.datastax.com/en/playlist/doc/java/playlistArchitecture.html  https://developers.google.com/drive/api/v3/about-files",
+            "title": "Links"
         },
         {
             "location": "/features/smart_search/",
