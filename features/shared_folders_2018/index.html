@@ -103,11 +103,35 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#implementation-of-legacy-bookmarks">Implementation of Legacy Bookmarks</a></li>
+        
+            <li><a class="toctree-l4" href="#terms-and-definitions">Terms and Definitions</a></li>
+        
+            <li><a class="toctree-l4" href="#ui-interactions">UI Interactions</a></li>
+        
             <li><a class="toctree-l4" href="#requirements">Requirements</a></li>
         
             <li><a class="toctree-l4" href="#api">API</a></li>
         
-            <li><a class="toctree-l4" href="#database-structure">Database Structure</a></li>
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#database-structure">Database Structure</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#existing-tables">Existing Tables</a></li>
+        
+            <li><a class="toctree-l4" href="#methods-without-using-custom-order">Methods without using custom order</a></li>
+        
+            <li><a class="toctree-l4" href="#methods-with-custom-order-integer-position-field">Methods with custom order (integer position field)</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#reference">Reference</a></li>
+    
+        <ul>
         
             <li><a class="toctree-l4" href="#links">Links</a></li>
         
@@ -165,30 +189,93 @@
               
                 <h1 id="business-objective-draft-05032018">Business Objective (draft - 05/03/2018)</h1>
 <p>Add support for sharable folders</p>
+<h2 id="implementation-of-legacy-bookmarks">Implementation of Legacy Bookmarks</h2>
+<p>https://github.com/aml-development/ozp-backend/issues/7</p>
+<p>https://github.com/aml-development/ozp-backend/pull/252</p>
+<h2 id="terms-and-definitions">Terms and Definitions</h2>
+<ul>
+<li>bookmark - can represent a folder or listing</li>
+<li>folder bookmark - group of listing bookmarks</li>
+<li>shared folder owners - users who own shared folder</li>
+<li>listing owners - users who own listing</li>
+</ul>
+<h2 id="ui-interactions">UI Interactions</h2>
+<ul>
+<li>Should show all bookmarks</li>
+<li>User management component<ul>
+<li>Get all users permission for a folder (username, role) ordered by role, username?</li>
+<li>Change Role for a person for a folder</li>
+</ul>
+</li>
+<li>Get share-able link</li>
+</ul>
 <h2 id="requirements">Requirements</h2>
-<p>We want to allow users to share a folder that is maintained by one or more users (owner/admin).</p>
+<h3 id="general">General</h3>
+<ul>
+<li>When the folder is updated by any owner, the folder updates are visible to all users after calling api again (refresh)</li>
+</ul>
+<h3 id="permissions">Permissions</h3>
+<ul>
+<li>Should allow users to share a folder that is maintained by one or more users (owner).<ul>
+<li>what type of users?</li>
+</ul>
+</li>
+<li>Shared Folder Viewer Should be able to<ul>
+<li>get a list of bookmarks</li>
+</ul>
+</li>
+<li>Shared Folder Owner should be able to<ul>
+<li>modify the folder</li>
+<li>add other owners</li>
+<li>delete delete owners</li>
+<li>change permissions</li>
+<li>Everything a Shared Folder Viewer can do</li>
+</ul>
+</li>
+<li>Shared Folder Owner should be able to see user management component</li>
+<li>Shared Folder Viewer should <strong>not</strong> be able to see user management component</li>
+</ul>
+<h3 id="notifications">Notifications</h3>
+<ul>
+<li>Send notification for updates to all owners/viewers of shared folder<ul>
+<li>updates<ul>
+<li>[ ] Adding user to shared folder</li>
+<li>[ ] Removing user from shared folder</li>
+<li>[x] Adding listing to shared folder</li>
+<li>[x] Removing listing from shared folder</li>
+<li>[ ] Changing permissions of a user for shared folder</li>
+<li>[x] Removing shared folder</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="un-categorized">Un-categorized</h3>
 <p>Owners and Viewers are two different user type</p>
-<p>When the folder is updated by any owner, the folder updates are visible to all users.</p>
-<p>Send notification for shared folder updates to all owners/viewers</p>
-<p>The folder should have 'owners' who can modify the folder, add other owners, delete delete owners, change permissions, should see user management component.</p>
 <p>The folder should have 'viewers' that can only view, but not edit, the folder, should not see user management component</p>
 <p>The UI component, when available, would let the folder creator select users to share to, and set their permissions (similar in the way google sheets/docs sharing works).</p>
 <p>We will also maintain the concept of a copied folder, but will also add a true 'shared' folder.</p>
 <p>Regular Folder, Duplicate Folder, Shared Folder  are the different types of folder</p>
+<p>if user send a shareable link to someone without access to folder,
+should we send a notification to the owners saying
+"User requesting access to folder,  allow - denied access",
+the user side it would be "Access Denied - request for access button"
+or will it be public anyone can view folder?</p>
 <h3 id="acceptance-criteria">Acceptance Criteria</h3>
 <p>A new type of bookmark folder is available in the backend, that has permissions associated with it (view/edit)</p>
 <h2 id="api">API</h2>
+<p>http://www.django-rest-framework.org/api-guide/filtering/#filtering-and-object-lookups</p>
 <h3 id="operations">operations</h3>
 <ul>
 <li>bookmark<ul>
 <li>create - POST: /api/bookmarks - create bookmark listing</li>
-<li>list - GET: /api/bookmarks/?filters=type:LISTING - list all bookmarks (listing)</li>
+<li>list - GET: /api/bookmarks/?type=LISTING - list all bookmarks (listing)</li>
 <li>bulk update</li>
 </ul>
 </li>
 <li>folder<ul>
 <li>create - POST /api/bookmarks/ - create bookmark folder</li>
-<li>lists  - GET: /api/bookmarks/?filters=type:FOLDER - list all bookmarks (folders/shared folders)</li>
+<li>lists  - GET: /api/bookmarks/?type=FOLDER - list all bookmarks (folders/shared folders)</li>
 </ul>
 </li>
 <li>children<ul>
@@ -199,9 +286,19 @@
 </ul>
 </li>
 </ul>
-<h2 id="database-structure">Database Structure</h2>
+<h1 id="database-structure">Database Structure</h1>
+<h2 id="existing-tables">Existing Tables</h2>
+<ul>
+<li>Listing</li>
+<li>Profile</li>
+<li>User</li>
+</ul>
+<h2 id="methods-without-using-custom-order">Methods without using custom order</h2>
 <h3 id="method-1-relational-self-reference">Method 1 - Relational self-reference</h3>
-<h3 id="method-2-relational-fully-normalized-with-position">Method 2 - Relational fully normalized (with position)</h3>
+<h2 id="methods-with-custom-order-integer-position-field">Methods with custom order (integer position field)</h2>
+<h3 id="method-1-relational-self-reference_1">Method 1 - Relational self-reference</h3>
+<h3 id="method-2-relational-fully-normalized">Method 2 - Relational fully normalized</h3>
+<h1 id="reference">Reference</h1>
 <h2 id="links">Links</h2>
 <ul>
 <li>https://stackoverflow.com/questions/9736548/database-schema-how-the-relationship-can-be-designed-between-user-file-and-fol</li>
