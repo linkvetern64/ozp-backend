@@ -99,13 +99,22 @@
     <a class="current" href="./">Shared folders 2018</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#business-objective-draft-05032018">Business Objective (draft - 05/03/2018)</a></li>
+    <li class="toctree-l3"><a href="#business-objective-bookmarks-hud">Business Objective - Bookmarks (hud)</a></li>
     
         <ul>
         
+            <li><a class="toctree-l4" href="#terms-and-definitions">Terms and Definitions</a></li>
+        
             <li><a class="toctree-l4" href="#implementation-of-legacy-bookmarks">Implementation of Legacy Bookmarks</a></li>
         
-            <li><a class="toctree-l4" href="#terms-and-definitions">Terms and Definitions</a></li>
+        </ul>
+    
+
+    <li class="toctree-l3"><a href="#business-objective-shared-bookmarks-aml30-draft-05032018">Business Objective - Shared Bookmarks (aml3.0 draft - 05/03/2018)</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#terms-and-definitions_1">Terms and Definitions</a></li>
         
             <li><a class="toctree-l4" href="#ui-interactions">UI Interactions</a></li>
         
@@ -189,12 +198,20 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="business-objective-draft-05032018">Business Objective (draft - 05/03/2018)</h1>
-<p>Add support for sharable folders</p>
-<h2 id="implementation-of-legacy-bookmarks">Implementation of Legacy Bookmarks</h2>
-<p>https://github.com/aml-development/ozp-backend/issues/7</p>
-<p>https://github.com/aml-development/ozp-backend/pull/252</p>
+                <h1 id="business-objective-bookmarks-hud">Business Objective - Bookmarks (hud)</h1>
 <h2 id="terms-and-definitions">Terms and Definitions</h2>
+<ul>
+<li>bookmark - enabled quick access for listing</li>
+</ul>
+<p>concept of shared folder was to make a</p>
+<h2 id="implementation-of-legacy-bookmarks">Implementation of Legacy Bookmarks</h2>
+<ul>
+<li>https://github.com/aml-development/ozp-backend/issues/7</li>
+<li>https://github.com/aml-development/ozp-backend/pull/252</li>
+</ul>
+<h1 id="business-objective-shared-bookmarks-aml30-draft-05032018">Business Objective - Shared Bookmarks (aml3.0 draft - 05/03/2018)</h1>
+<p>Add support for sharable folders</p>
+<h2 id="terms-and-definitions_1">Terms and Definitions</h2>
 <ul>
 <li>bookmark - can represent a folder or listing</li>
 <li>folder bookmark - group of listing bookmarks</li>
@@ -298,7 +315,42 @@ or will it be public anyone can view folder?</p>
 <h2 id="methods-without-using-custom-order">Methods without using custom order</h2>
 <h3 id="method-1-relational-self-reference">Method 1 - Relational self-reference</h3>
 <h2 id="methods-with-custom-order-integer-position-field">Methods with custom order (integer position field)</h2>
+<p>Two users - bigbrother, jones  <br />
+bigbrother id = 1  <br />
+jones id = 2</p>
+<pre><code>[Listing,...] = List
+(Type-Title[Listing,...]) = Folder
+</code></pre>
+
+<pre><code>bigbrother
+  [
+    (
+      Shard-F1
+        [1, 2]
+    )
+    (
+        Folder-F2
+        [1]
+    )
+    1
+    2
+  ]
+</code></pre>
+
+<pre><code>jones
+  [
+    1
+    (
+      Shared-F1
+        [1,2]
+    )
+    3
+  ]
+</code></pre>
+
 <h3 id="method-1-relational-self-reference_1">Method 1 - Relational self-reference</h3>
+<p>Table <code>entry_profile</code></p>
+<p>Table <code>entry</code></p>
 <h3 id="method-2-relational-fully-normalized">Method 2 - Relational fully normalized</h3>
 <h2 id="methods-to-maintain-backward-compatability">Methods to maintain backward compatability</h2>
 <h3 id="method-1-create-v2-api-for-30-use">Method 1 - Create V2 API for 3.0 use</h3>
