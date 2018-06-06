@@ -287,21 +287,21 @@ or will it be public anyone can view folder?</p>
 <h3 id="operations">operations</h3>
 <ul>
 <li>bookmark<ul>
-<li>create - POST: /api/bookmarks - create bookmark listing</li>
-<li>list - GET: /api/bookmarks/?type=LISTING - list all bookmarks (listing)</li>
+<li>create - POST: /api/bookmark - create bookmark listing</li>
+<li>list - GET: /api/bookmark/?type=LISTING - list all bookmarks (listing)</li>
 <li>bulk update</li>
 </ul>
 </li>
 <li>folder<ul>
-<li>create - POST /api/bookmarks/ - create bookmark folder</li>
-<li>lists  - GET: /api/bookmarks/?type=FOLDER - list all bookmarks (folders/shared folders)</li>
+<li>create - POST /api/bookmark/ - create bookmark folder</li>
+<li>lists  - GET: /api/bookmark/?type=FOLDER - list all bookmarks (folders/shared folders)</li>
 </ul>
 </li>
 <li>children<ul>
-<li>add - PUT : /bookmarks/{parentId}/children/{childId} -Adds child to a Folder</li>
-<li>move - POST: /bookmarks/{toparentId}/children Move a child from one node to another</li>
-<li>delete - DELETE : /bookmarks/{parentId}/children/{childId} - Removes the child</li>
-<li>list - GET : /bookmarks/{id}/children - Lists all children</li>
+<li>add - PUT : /bookmark/{parentId}/children/{childId} -Adds child to a Folder</li>
+<li>move - POST: /bookmark/{toparentId}/children  Move a child from one node to another</li>
+<li>delete - DELETE : /bookmark/{parentId}/children/{childId} - Removes the child</li>
+<li>list - GET : /bookmark/{id}/children - Lists all children</li>
 </ul>
 </li>
 </ul>
@@ -314,22 +314,18 @@ or will it be public anyone can view folder?</p>
 </ul>
 <h2 id="methods-without-using-custom-order">Methods without using custom order</h2>
 <h3 id="method-1-relational-self-reference-child-parent">Method 1 - Relational self-reference (child-parent)</h3>
-<p>Models
-* bookmarks
-    * id (integer)
-    * name of folder (string)
-    * listing id (foreign key)
-    * root (boolean)
-    * parents (many to many)
-    * created_date (datetime)
-    * type (choice - folder/listing)</p>
+<h4 id="models">Models</h4>
 <ul>
 <li>
-<p>bookmark_parent_relationships (m2m table - storage of child-parent relationships)</p>
+<p>Bookmark</p>
 <ul>
 <li>id (integer)</li>
-<li>bookmark (foreign_key to bookmarks id)</li>
-<li>parent_bookmark (foreign_key to bookmarks id, 1 bookmark can have many parents)</li>
+<li>name of folder (string)</li>
+<li>listing id (foreign key)</li>
+<li>root (boolean)</li>
+<li>parent_id (foreign_key to bookmarks)</li>
+<li>created_date (datetime)</li>
+<li>type (choice - folder/listing)</li>
 </ul>
 </li>
 <li>
@@ -342,9 +338,28 @@ or will it be public anyone can view folder?</p>
 </ul>
 </li>
 </ul>
+<p><strong>Optional Tables:</strong></p>
+<ul>
+<li>bookmark_parent_relationships (m2m table - storage of child-parent relationships)<ul>
+<li>id (integer)</li>
+<li>bookmark (foreign_key to bookmarks id)</li>
+<li>parent_bookmark (foreign_key to bookmarks id, 1 bookmark can have many parents)</li>
+</ul>
+</li>
+</ul>
+<p>when would <code>bookmark_parent_relationships</code> table be good to use?</p>
 <p>Rules
 * Each user has only one bookmark root folder, the user is the owner of root folder
     * bookmarks.objects.filter(root=true, )</p>
+<h4 id="methods-pseudocode">Methods (pseudocode)</h4>
+<h5 id="getting-root-folder-for-user">Getting root folder for user</h5>
+<pre><code>def get_create_root_folder(request_profile):
+    &quot;&quot;&quot;
+    returns one bookmark model object
+    &quot;&quot;&quot;
+
+</code></pre>
+
 <h2 id="methods-with-custom-order-integer-position-field">Methods with custom order (integer position field)</h2>
 <pre><code>[Listing,...] = List
 (Type-Title[Listing,...]) = Folder
