@@ -107,6 +107,8 @@
         
             <li><a class="toctree-l4" href="#implementation-of-legacy-bookmarks">Implementation of Legacy Bookmarks</a></li>
         
+            <li><a class="toctree-l4" href="#api">API</a></li>
+        
         </ul>
     
 
@@ -120,7 +122,7 @@
         
             <li><a class="toctree-l4" href="#requirements">Requirements</a></li>
         
-            <li><a class="toctree-l4" href="#api">API</a></li>
+            <li><a class="toctree-l4" href="#api_1">API</a></li>
         
         </ul>
     
@@ -209,8 +211,54 @@
 <li>https://github.com/aml-development/ozp-backend/issues/7</li>
 <li>https://github.com/aml-development/ozp-backend/pull/252</li>
 </ul>
+<h2 id="api">API</h2>
+<h3 id="get-user-library">Get User library</h3>
+<pre><code>GET /api/self/library HTTP/1.1
+Host: 127.0.0.1:8001
+Authorization: Basic YmlnYnJvdGhlcjpwYXNzd29yZA==  # bigbrother
+
+[
+    {
+        &quot;listing&quot;: {
+            &quot;id&quot;: 169,
+            &quot;title&quot;: &quot;Tornado&quot;,
+            &quot;unique_name&quot;: &quot;tornado&quot;,
+            &quot;launch_url&quot;: &quot;https://en.wikipedia.org/wiki/Tornado&quot;,
+            &quot;small_icon&quot;: {
+                &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/683/&quot;,
+                &quot;id&quot;: 683,
+                &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+            },
+            &quot;large_icon&quot;: {
+                &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/684/&quot;,
+                &quot;id&quot;: 684,
+                &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+            },
+            &quot;banner_icon&quot;: {
+                &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/685/&quot;,
+                &quot;id&quot;: 685,
+                &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+            },
+            &quot;owners&quot;: [
+                {
+                    &quot;id&quot;: 1,
+                    &quot;user&quot;: {
+                        &quot;username&quot;: &quot;bigbrother&quot;
+                    },
+                    &quot;display_name&quot;: &quot;Big Brother&quot;
+                }
+            ]
+        },
+        &quot;folder&quot;: &quot;Weather&quot;,
+        &quot;id&quot;: 50,
+        &quot;position&quot;: 0
+    }, ...
+]
+
+</code></pre>
+
 <h1 id="business-objective-shared-bookmarks-aml30-draft-05032018">Business Objective - Shared Bookmarks (aml3.0 draft - 05/03/2018)</h1>
-<p>Add support for sharable folders</p>
+<p>Add support for share-able folders</p>
 <h2 id="terms-and-definitions_1">Terms and Definitions</h2>
 <ul>
 <li>bookmark - can represent a folder or listing</li>
@@ -282,9 +330,9 @@ the user side it would be "Access Denied - request for access button"
 or will it be public anyone can view folder?</p>
 <h3 id="acceptance-criteria">Acceptance Criteria</h3>
 <p>A new type of bookmark folder is available in the backend, that has permissions associated with it (view/edit)</p>
-<h2 id="api">API</h2>
+<h2 id="api_1">API</h2>
 <p>http://www.django-rest-framework.org/api-guide/filtering/#filtering-and-object-lookups</p>
-<h3 id="operations">operations</h3>
+<h3 id="operations">Operations</h3>
 <ul>
 <li>bookmark<ul>
 <li>create - POST: /api/bookmark - create bookmark listing</li>
@@ -305,6 +353,136 @@ or will it be public anyone can view folder?</p>
 </ul>
 </li>
 </ul>
+<pre><code>[
+  {
+    &quot;id&quot; : {string} &quot;unique identifier of a bookmark&quot;, # integer
+    &quot;name&quot; : {string} &quot;user friendly name of a FOLDER&quot;, # string, max 256 characters
+    &quot;kind&quot; : &quot;LISTING&quot;, # literal string, &quot;LISTING&quot;,  can also be &quot;FOLDER&quot;
+    &quot;modifiedDate&quot; :  {datetime} Last modified date (ISO8601 date with timezone offset),
+    &quot;createdDate&quot; : {datetime} First uploaded date (ISO8601 date with timezone offset),
+    &quot;parent&quot;: {
+      &quot;id&quot; : {string} &quot;unique identifier of a bookmark&quot;, # integer
+      &quot;name&quot; : {string} &quot;user friendly name of a FOLDER&quot;, # string, max 256 characters
+      &quot;kind&quot; : &quot;FOLDER&quot;, # literal string &quot;FOLDER&quot;
+    },
+    &quot;listing&quot;: {  # If the kind is a listing then fill else null
+        &quot;id&quot;: 169,
+        &quot;title&quot;: &quot;Tornado&quot;,
+        &quot;unique_name&quot;: &quot;tornado&quot;,
+        &quot;launch_url&quot;: &quot;https://en.wikipedia.org/wiki/Tornado&quot;,
+        &quot;small_icon&quot;: {
+            &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/683/&quot;,
+            &quot;id&quot;: 683,
+            &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+        },
+        &quot;large_icon&quot;: {
+            &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/684/&quot;,
+            &quot;id&quot;: 684,
+            &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+        },
+        &quot;banner_icon&quot;: {
+            &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/685/&quot;,
+            &quot;id&quot;: 685,
+            &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+        },
+        &quot;owners&quot;: [
+            {
+                &quot;id&quot;: 1,
+                &quot;user&quot;: {
+                    &quot;username&quot;: &quot;bigbrother&quot;
+                },
+                &quot;display_name&quot;: &quot;Big Brother&quot;
+            }
+        ]
+    }
+  },...
+]
+</code></pre>
+
+<p>OR</p>
+<pre><code>[
+  {
+    &quot;id&quot; : {string} &quot;unique identifier of a bookmark&quot;, # integer
+    &quot;name&quot; : {string} &quot;user friendly name of a FOLDER&quot;, # string, max 256 characters
+    &quot;kind&quot; : &quot;LISTING&quot;, # literal string, &quot;LISTING&quot;,  can also be &quot;FOLDER&quot;
+    &quot;modifiedDate&quot; :  {datetime} Last modified date (ISO8601 date with timezone offset),
+    &quot;createdDate&quot; : {datetime} First uploaded date (ISO8601 date with timezone offset),
+    &quot;listing&quot;: {  # If the kind is a listing then fill else null
+        &quot;id&quot;: 169,
+        &quot;title&quot;: &quot;Tornado&quot;,
+        &quot;unique_name&quot;: &quot;tornado&quot;,
+        &quot;launch_url&quot;: &quot;https://en.wikipedia.org/wiki/Tornado&quot;,
+        &quot;small_icon&quot;: {
+            &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/683/&quot;,
+            &quot;id&quot;: 683,
+            &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+        },
+        &quot;large_icon&quot;: {
+            &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/684/&quot;,
+            &quot;id&quot;: 684,
+            &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+        },
+        &quot;banner_icon&quot;: {
+            &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/685/&quot;,
+            &quot;id&quot;: 685,
+            &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+        },
+        &quot;owners&quot;: [
+            {
+                &quot;id&quot;: 1,
+                &quot;user&quot;: {
+                    &quot;username&quot;: &quot;bigbrother&quot;
+                },
+                &quot;display_name&quot;: &quot;Big Brother&quot;
+            }
+        ]
+    },
+    children:[
+      {
+        &quot;id&quot; : {string} &quot;unique identifier of a bookmark&quot;, # integer
+        &quot;name&quot; : {string} &quot;user friendly name of a FOLDER&quot;, # string, max 256 characters
+        &quot;kind&quot; : &quot;LISTING&quot;, # literal string, &quot;LISTING&quot;,  can also be &quot;FOLDER&quot;
+        &quot;modifiedDate&quot; :  {datetime} Last modified date (ISO8601 date with timezone offset),
+        &quot;createdDate&quot; : {datetime} First uploaded date (ISO8601 date with timezone offset),
+        &quot;listing&quot;: {  # If the kind is a listing then fill else null
+            &quot;id&quot;: 169,
+            &quot;title&quot;: &quot;Tornado&quot;,
+            &quot;unique_name&quot;: &quot;tornado&quot;,
+            &quot;launch_url&quot;: &quot;https://en.wikipedia.org/wiki/Tornado&quot;,
+            &quot;small_icon&quot;: {
+                &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/683/&quot;,
+                &quot;id&quot;: 683,
+                &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+            },
+            &quot;large_icon&quot;: {
+                &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/684/&quot;,
+                &quot;id&quot;: 684,
+                &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+            },
+            &quot;banner_icon&quot;: {
+                &quot;url&quot;: &quot;http://127.0.0.1:8001/api/image/685/&quot;,
+                &quot;id&quot;: 685,
+                &quot;security_marking&quot;: &quot;UNCLASSIFIED&quot;
+            },
+            &quot;owners&quot;: [
+                {
+                    &quot;id&quot;: 1,
+                    &quot;user&quot;: {
+                        &quot;username&quot;: &quot;bigbrother&quot;
+                    },
+                    &quot;display_name&quot;: &quot;Big Brother&quot;
+                }
+            ]
+        },
+        children:[
+
+        ]
+      },......
+    ]
+  },......
+]
+</code></pre>
+
 <h1 id="database-structure">Database Structure</h1>
 <h2 id="existing-tables">Existing Tables</h2>
 <ul>
@@ -313,32 +491,102 @@ or will it be public anyone can view folder?</p>
 <li>User</li>
 </ul>
 <h2 id="methods-without-using-custom-order">Methods without using custom order</h2>
-<h3 id="method-1-relational-self-reference-child-parent">Method 1 - Relational self-reference (child-parent)</h3>
+<h3 id="method-1-relational-self-reference-child-parent-not-using-root-folder">Method 1 - Relational self-reference (child-parent not using root folder)</h3>
 <h4 id="models">Models</h4>
-<ul>
-<li>
-<p>Bookmark</p>
-<ul>
-<li>id (integer)</li>
-<li>name of folder (string)</li>
-<li>listing id (foreign key)</li>
-<li>root (boolean)</li>
-<li>parent_id (foreign_key to bookmarks)</li>
-<li>created_date (datetime)</li>
-<li>type (choice - folder/listing)</li>
-</ul>
-</li>
-<li>
-<p>bookmarks_permission (m2m table - who can view bookmarks)</p>
-<ul>
-<li>id (integer)</li>
-<li>profile (foreign_id)</li>
-<li>permission (owner/viewer)</li>
-<li>bookmark (foreign_key to bookmarks id)</li>
-</ul>
-</li>
-</ul>
-<p><strong>Optional Tables:</strong></p>
+<pre><code>class BookmarkEntry(models.Model):
+    bookmark_parent = models.ForeignKey('BookmarkEntry', null=True, blank=True)
+    title = models.CharField(max_length=255)
+
+    created_date = models.DateTimeField(default=utils.get_now_utc)
+    modified_date = models.DateTimeField(default=utils.get_now_utc)
+
+    listing = models.ForeignKey('Listing', related_name='listing_entries', null=True, blank=True)
+
+    FOLDER = 'FOLDER'
+    LISTING = 'LISTING'
+
+    TYPE_CHOICES = (
+        (FOLDER, 'FOLDER'),
+        (LISTING, 'LISTING'),
+    )
+    type = models.CharField(max_length=255, choices=TYPE_CHOICES, default=FOLDER)
+
+    creator = models.ForeignKey('Profile')
+
+class BookmarkPermission(models.Model):
+    bookmark = models.ForeignKey('BookmarkEntry', related_name='bookmark_permission')
+    profile = models.ForeignKey('Profile')
+
+    created_date = models.DateTimeField(default=utils.get_now_utc)
+    modified_date = models.DateTimeField(default=utils.get_now_utc)
+
+    OWNER = 'OWNER'
+    VIEWER = 'VIEWER'
+
+    USER_TYPE_CHOICES = (
+        (OWNER, 'OWNER'),
+        (VIEWER, 'VIEWER'),
+    )
+    user_type = models.CharField(max_length=255, choices=USER_TYPE_CHOICES, default=VIEWER)
+</code></pre>
+
+<h4 id="methods-pseudocode">Methods (pseudocode)</h4>
+<h5 id="getting-root-folder-for-user">Getting root folder for user</h5>
+<pre><code>
+</code></pre>
+
+<h5 id="getting-first-level-entries-for-user">Getting first level entries for user</h5>
+<pre><code>
+</code></pre>
+
+<h4 id="adding-a-new-listing-under-a-folder">Adding a new listing under a folder</h4>
+<pre><code>
+</code></pre>
+
+<h4 id="adding-new-user-as-a-viewer-to-a-shared-folder">Adding new user as a viewer to a shared folder</h4>
+<h4 id="removing-a-user-from-shared-folder-list">Removing a user from shared folder list</h4>
+<h3 id="method-2-relational-self-reference-child-parent-using-root-folder">Method 2 - Relational self-reference (child-parent using root folder)</h3>
+<h4 id="models_1">Models</h4>
+<pre><code>class BookmarkEntry(models.Model):
+    bookmark_parent = models.ForeignKey('BookmarkEntry', null=True, blank=True)
+    # bookmark_parents = models.ManyToManyField('BookmarkEntry', null=True, blank=True)
+    # bookmark_parents m2mField is needed becuause of bookmark_parent_relationships
+    title = models.CharField(max_length=255)
+
+    created_date = models.DateTimeField(default=utils.get_now_utc)
+    modified_date = models.DateTimeField(default=utils.get_now_utc)
+
+    listing = models.ForeignKey('Listing', related_name='listing_entries', null=True, blank=True)
+
+    is_root = models.BooleanField(default=False)
+
+    FOLDER = 'FOLDER'
+    LISTING = 'LISTING'
+
+    TYPE_CHOICES = (
+        (FOLDER, 'FOLDER'),
+        (LISTING, 'LISTING'),
+    )
+    type = models.CharField(max_length=255, choices=TYPE_CHOICES, default=FOLDER)
+
+
+class BookmarkPermission(models.Model):
+    bookmark = models.ForeignKey('BookmarkEntry', related_name='bookmark_permission')
+    profile = models.ForeignKey('Profile')
+
+    created_date = models.DateTimeField(default=utils.get_now_utc)
+    modified_date = models.DateTimeField(default=utils.get_now_utc)
+
+    OWNER = 'OWNER'
+    VIEWER = 'VIEWER'
+
+    USER_TYPE_CHOICES = (
+        (OWNER, 'OWNER'),
+        (VIEWER, 'VIEWER'),
+    )
+    user_type = models.CharField(max_length=255, choices=USER_TYPE_CHOICES, default=VIEWER)
+</code></pre>
+
 <ul>
 <li>bookmark_parent_relationships (m2m table - storage of child-parent relationships)<ul>
 <li>id (integer)</li>
@@ -348,16 +596,63 @@ or will it be public anyone can view folder?</p>
 </li>
 </ul>
 <p>when would <code>bookmark_parent_relationships</code> table be good to use?</p>
+<pre><code>r1 = root folder for user 1
+r2 = root folder for user 2
+S1 = Shared Folder for user 1 and user 2
++-----------------+  +-----------------+
+|                 |  |                 |
+|         +----+  |  | +------+        |
+|         |r1  |  |  | |r2    |        |
+|         +----+  |  | +--+---+        |
+|    +------+     |  |    |            |
+|    v            |  |    v            |
+| +--+-+          |  | +--+---+        |
+| | S1 |          |  | |S1    |        |
+| +----+          |  | +------+        |
+|   Owner         |  |  Viewer         |
+|                 |  |                 |
++-----------------+  +-----------------+
+</code></pre>
+
 <p>Rules
 * Each user has only one bookmark root folder, the user is the owner of root folder
     * bookmarks.objects.filter(root=true, )</p>
-<h4 id="methods-pseudocode">Methods (pseudocode)</h4>
-<h5 id="getting-root-folder-for-user">Getting root folder for user</h5>
-<pre><code>def get_create_root_folder(request_profile):
+<h4 id="methods-pseudocode_1">Methods (pseudocode)</h4>
+<h5 id="getting-root-folder-for-user_1">Getting root folder for user</h5>
+<pre><code>def create_get_user_root_bookmark_folder(profile):
     &quot;&quot;&quot;
-    returns one bookmark model object
+    Create or Get user's root folder
+    profile = Profile.objects.first()
     &quot;&quot;&quot;
+    bookmark_entry_query = models.BookmarkEntry.objects.filter(
+                            bookmark_permission__profile=profile,
+                            bookmark_permission__user_type='OWNER',
+                            is_root=True)
 
+
+    if bookmark_entry_query:
+        if len(bookmark_entry_query) &gt;= 2:
+            print('A USER SHOULD NOT HAVE MORE THAN ONE ROOT FOLDER')
+
+        return bookmark_entry_query[0]
+    else:
+        bookmark_entry = models.BookmarkEntry()
+        bookmark_entry.type = bookmark_entry.FOLDER
+        bookmark_entry.is_root = True
+        bookmark_entry.title = 'ROOT'
+        bookmark_entry.save()
+
+        bookmark_permission = models.BookmarkPermission()
+        bookmark_permission.bookmark=bookmark_entry
+        bookmark_permission.profile=profile
+        bookmark_permission.user_type=models.BookmarkPermission.OWNER
+        bookmark_permission.save()
+
+        return bookmark_entry
+</code></pre>
+
+<h5 id="getting-first-level-entries-for-user_1">Getting first level entries for user</h5>
+<pre><code>
 </code></pre>
 
 <h2 id="methods-with-custom-order-integer-position-field">Methods with custom order (integer position field)</h2>
