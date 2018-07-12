@@ -55,6 +55,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    country: 'SUPER'
     visas: [NOVEMBER]
   bio: 'I make everyones life better'
   display_name: Big Brother
@@ -70,6 +71,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    country: 'SUPER'
     visas: [NOVEMBER]
   bio: 'I also make everyones life better'
   display_name: Big Brother2
@@ -85,6 +87,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    country: 'SUPER'
     visas: [DRS]
   bio: 'I am Queen of Meereen, Queen of the Andals(, the Rhoynar) and the First Men, Lady Regnant of the Seven Kingdoms, Khaleesi of the Great Grass Sea, Mhysa, Breaker of Chains, the Unburnt, Mother of Dragons'
   display_name: Daenerys Targaryen
@@ -100,6 +103,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    country: 'SUPER'
     visas: [NOVEMBER]
   bio: 'A territorial fish prone to high levels of aggression toward each other'
   display_name: Betta Fish
@@ -119,6 +123,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO]
+    country: 'SUPER'
     visas: [NOVEMBER]
   bio: 'I work at the Ministry of Truth'
   display_name: Winston Smith
@@ -134,6 +139,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA]
+    country: 'SUPER'
     visas: []
   bio: 'An especially zealous propagandist'
   display_name: Julia Dixon
@@ -149,6 +155,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    country: 'NONSUPER'
     visas: [NOVEMBER]
   bio: 'I will find you, winston and julia'
   display_name: O'brien
@@ -164,6 +171,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    country: 'SUPER'
     visas: [NOVEMBER]
   bio: 'Minister of Love'
   display_name: David
@@ -182,6 +190,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
+    country: 'NONSUPER'
     visas: [NOVEMBER]
   bio: 'Nothing special'
   display_name: Aaronson
@@ -197,6 +206,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
+    country: 'SUPER'
     visas: [NOVEMBER]
   bio: 'Nothing special 2'
   display_name: pmurt
@@ -212,6 +222,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
+    country: 'SUPER'
     visas: [STE, RVR, PKI]
   bio: 'Hold the door'
   display_name: Hodor
@@ -227,6 +238,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    country: 'SUPER'
     visas: [NOVEMBER]
   bio: 'Regular person worthy to weild Mjolnir'
   display_name: Beta Ray Bill
@@ -245,6 +257,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
+    country: 'SUPER'
     visas: [NOVEMBER]
   bio: 'I am a normal person'
   display_name: Jones
@@ -260,6 +273,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
+    country: 'SUPER'
     visas: [NOVEMBER, PKI]
   bio: 'I am a normal person also'
   display_name: Tammy
@@ -278,6 +292,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
+    country: 'SUPER'
     visas: []
   bio: 'I am a normal person'
   display_name: Rutherford
@@ -293,6 +308,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
+    country: 'SUPER'
     visas: [PKI]
   bio: 'I am a cool normal person'
   display_name: Noah
@@ -311,6 +327,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA]
+    country: 'NONSUPER'
     visas: []
   bio: 'I am too smart for my own good also'
   display_name: Syme
@@ -326,6 +343,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA]
+    country: 'SUPER'
     visas: [PKI]
   bio: 'I am uneducated and loyal'
   display_name: Abe
@@ -344,6 +362,7 @@
 - access_control:
     clearances: [UNCLASSIFIED]
     formal_accesses: []
+    country: 'SUPER'
     visas: []
   bio: 'I know nothing.'
   display_name: Tom Parsons
@@ -359,6 +378,7 @@
 - access_control:
     clearances: [UNCLASSIFIED]
     formal_accesses: []
+    country: 'SUPER'
     visas: [TWN, PKI]
   bio: 'A member of the Thought Police'
   display_name: Jon Snow
@@ -377,6 +397,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    country: 'SUPER'
     visas: [NOVEMBER]
   bio: 'A member of the Thought Police also'
   display_name: Charrington
@@ -392,6 +413,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    country: 'NONSUPER'
     visas: [NOVEMBER, PKI]
   bio: 'I am uneducated and loyal'
   display_name: Johnson

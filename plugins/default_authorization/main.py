@@ -51,6 +51,7 @@ class PluginMain(object):
             'formal_accesses': ['AB', 'CD'],
             'visas': ['ABC', 'XYZ'],
             'duty_org': 'org',
+            'country': 'USA',
             'is_org_steward': False,
             'is_apps_mall_steward': False,
             'is_metrics_user': True
@@ -69,7 +70,7 @@ class PluginMain(object):
 
         user_data = r.json()
 
-        user_json_keys = ['dn', 'formalAccesses', 'clearances', 'dutyorg', 'visas']
+        user_json_keys = ['dn', 'formalAccesses', 'clearances', 'dutyorg', 'visas', 'country']
         for user_key in user_json_keys:
             if user_key not in user_data:
                 raise ValueError('Endpoint {0!s} not return value output - missing key: {1!s}'.format(url, user_key))

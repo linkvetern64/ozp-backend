@@ -146,11 +146,11 @@ class PluginMain(object):
         user_accesses_json = profile.access_control
         user_accesses = json.loads(user_accesses_json)
 
-        user_visas = user_accesses['visas']
+        user_country = user_accesses['country']
 
-        if 'PKI' in user_visas:
-            return True
-        return False
+        if 'SUPER' == user_country:
+            return False
+        return True
 
     def anonymize_value(self, data):
         """
@@ -253,6 +253,74 @@ class PluginMain(object):
         required_controls = markings[1:]
         missing_controls = [i for i in required_controls if i not in user_controls]
         if not missing_controls:
+            return True
+        else:
+            return False
+
+    def has_access_updated(self, username, marking):
+        profile = model_access.get_profile(username)
+
+        if not profile:
+            return False
+
+        user_accesses_json = profile.access_control
+
+        return self.future_has_access_json(user_accesses_json, marking)
+
+    def has_access_json_updated(self, user_accesses_json, marking):
+        """
+        Determine if a user has access to a given access control
+
+        Ultimately, this will likely invoke a separate service to do the check.
+        For now, some basic logic will suffice
+
+        Assume the access control is of the format:
+        <CLASSIFICATION>//<CONTROL>//<CONTROL>//...
+
+        i.e.: a single classification followed by additional marking categories
+        separated by //
+
+        Args:
+            user_accesses_json (string): user accesses in json (clearances, formal_accesses, visas)
+            marking: a valid (string): a valid security marking
+        """
+        if not marking:
+            return False
+        markings = marking.split('//')
+        # get the user's access_control data
+        try:
+            user_accesses = json.loads(user_accesses_json)
+        except ValueError:
+            logger.error('Error parsing JSON data: {0!s}'.format(user_accesses_json))
+            return False
+
+        # check country (SUPER is super country)
+        country = user_accesses['country']
+        if country == 'SUPER':
+            clearances = user_accesses['clearances']
+            required_clearance = markings[0]
+
+            if required_clearance not in clearances:
+                return False
+
+            return True
+
+        # for 2nd party users
+        # check clearances
+        clearances = user_accesses['clearances']
+        required_clearance = markings[0]
+
+        if required_clearance not in clearances:
+            return False
+
+        # just combine all of the user's formal accesses and visas
+        user_controls = user_accesses['formal_accesses']
+        user_controls += user_accesses['visas']
+
+        required_controls = markings[1:]
+        missing_controls = [i for i in required_controls if i not in user_controls]
+
+        if not missing_controls and 'NOTOUTSIDE' not in required_controls:
             return True
         else:
             return False

@@ -8,6 +8,7 @@
             "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
             "formalAccesses": ["SIERRA", "TANGO"],
             "visas": ["NOVEMBER"],
+            "country": "NONSUPER",
             "groups": ["cn=OZP_ORG_STEWARD,ou=ABC,ou=DEF,o=X.Y.Z"]
         },
         {
@@ -16,6 +17,7 @@
             "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
             "formalAccesses": ["SIERRA"],
             "visas": [],
+            "country": "NONSUPER",
             "groups": ["cn=OZP_ORG_STEWARD,ou=ABC,ou=DEF,o=X.Y.Z"]
         },
         {
@@ -24,6 +26,7 @@
             "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
             "formalAccesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"],
+            "country": "SUPER",
             "groups": ["cn=OZP_ORG_STEWARD,ou=ABC,ou=DEF,o=X.Y.Z"]
         },
         {
@@ -32,6 +35,7 @@
             "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
             "formalAccesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"],
+            "country": "NONSUPER",
             "groups": ["cn=OZP_APPS_MALL_STEWARD,ou=ABC,ou=DEF,o=X.Y.Z"]
         },
         {
@@ -40,6 +44,7 @@
             "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
             "formalAccesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"],
+            "country": "NONSUPER",
             "groups": ["cn=OZP_APPS_MALL_STEWARD,ou=ABC,ou=DEF,o=X.Y.Z"]
         },
         {
@@ -48,6 +53,7 @@
             "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
             "formalAccesses": [],
             "visas": ["NOVEMBER"],
+            "country": "SUPER",
             "groups": []
         },
         {
@@ -56,6 +62,7 @@
             "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
             "formalAccesses": [],
             "visas": ["NOVEMBER"],
+            "country": "SUPER",
             "groups": []
         },
         {
@@ -64,6 +71,7 @@
             "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
             "formalAccesses": [],
             "visas": [],
+            "country": "NONSUPER",
             "groups": []
         },
         {
@@ -72,6 +80,7 @@
             "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
             "formalAccesses": [],
             "visas": ["NOVEMBER"],
+            "country": "SUPER",
             "groups": []
         },
         {
@@ -80,6 +89,7 @@
             "clearances": ["UNCLASSIFIED"],
             "formalAccesses": [],
             "visas": [],
+            "country": "NONSUPER",
             "groups": []
         },
         {
@@ -88,6 +98,7 @@
             "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
             "formalAccesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"],
+            "country": "SUPER",
             "groups": []
         }
     ]

@@ -152,6 +152,7 @@ class AccessControlTest(TestCase):
             {
                 "clearances": ["UNCLASSIFIED"],
                 "formal_accesses": ["FOUO"],
+                "country": "USA",
                 "visas": []
             }
         )
@@ -256,3 +257,120 @@ class AccessControlTest(TestCase):
         self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'INVALID LEVEL'
         self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
+
+    def test_has_access_top_secret_updated_super_country(self):
+        user_accesses_json = json.dumps(
+            {
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
+                "formal_accesses": ["FOUO", "ABC"],
+                "country": "SUPER",
+                "visas": []
+            }
+        )
+        marking = 'UNCLASSIFIED//FOUO//ABC'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'CONFIDENTIAL//FOUO//ABC'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'SECRET//FOUO//ABC'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'TOP SECRET//FOUO//ABC'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+
+    def test_has_access_top_secret_updated_non_super_country(self):
+        user_accesses_json = json.dumps(
+            {
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
+                "formal_accesses": ["FOUO", "ABC"],
+                "country": "Jupiter",
+                "visas": ["ACGU"]
+            }
+        )
+        marking = 'TOP SECRET//ACGU'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'TOP SECRET//NOTOUTSIDE'
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'SECRET//ACGU'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'SECRET//NOTOUTSIDE'
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'UNCLASSIFIED//FVEY'
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'INVALID LEVEL'
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+
+    def test_has_access_secret_updated_super_country(self):
+        user_accesses_json = json.dumps(
+            {
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
+                "formal_accesses": ["FOUO", "ABC"],
+                "country": "SUPER",
+                "visas": []
+            }
+        )
+        marking = 'UNCLASSIFIED//FOUO//ABC'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'CONFIDENTIAL//FOUO//ABC'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'SECRET//FOUO//ABC'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        marking = 'TOP SECRET//FOUO//ABC'
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+
+    def test_has_access_secret_updated_country_and_visas(self):
+        user_accesses_json = json.dumps(
+            {
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
+                "formal_accesses": ["FOUO", "ABC"],
+                "country": "SUPER",
+                "visas": []
+            }
+        )
+        user_accesses_json2 = json.dumps(
+            {
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
+                "formal_accesses": ["FOUO", "ABC"],
+                "country": "NONSUPER",
+                "visas": ["ALL", "FOUR"]
+            }
+        )
+        user_accesses_json3 = json.dumps(
+            {
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
+                "formal_accesses": ["FOUO", "ABC"],
+                "country": "NONSUPER3",
+                "visas": ["FOUR"]
+            }
+        )
+        marking = 'TOP SECRET//ALL'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json2, marking))
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json3, marking))
+        marking = 'TOP SECRET//ONLYA'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json2, marking))
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json3, marking))
+        marking = 'SECRET//ALL'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json2, marking))
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json3, marking))
+        marking = 'SECRET//ONLYA'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json2, marking))
+        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json3, marking))
+        marking = 'SECRET//FOUR'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json2, marking))
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json3, marking))
+        marking = 'UNCLASSIFIED//FOUR'
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json2, marking))
+        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json3, marking))
+
+    def test_anonymize_identifiable_data(self):
+        # bigbrother
+        # {'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'], 'visas': ['NOVEMBER'], 'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'], 'country': 'SUPER'}
+        self.assertFalse(self.access_control_instance.anonymize_identifiable_data('bigbrother'))
+
+        # aaronson
+        # {'formal_accesses': [], 'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'], 'country': 'NONSUPER', 'visas': ['NOVEMBER']}
+        self.assertTrue(self.access_control_instance.anonymize_identifiable_data('aaronson'))
