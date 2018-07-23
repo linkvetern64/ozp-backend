@@ -123,7 +123,7 @@
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO]
-    country: 'NOTSUPER'
+    country: 'SUPER'
     visas: [NOVEMBER]
   bio: 'I work at the Ministry of Truth'
   display_name: Winston Smith

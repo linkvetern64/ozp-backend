@@ -276,46 +276,6 @@ class AccessControlTest(TestCase):
         marking = 'TOP SECRET//FOUO//ABC'
         self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
 
-    def test_has_access_top_secret_updated_non_super_country(self):
-        user_accesses_json = json.dumps(
-            {
-                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
-                "formal_accesses": ["FOUO", "ABC"],
-                "country": "Jupiter",
-                "visas": ["ACGU"]
-            }
-        )
-        marking = 'TOP SECRET//ACGU'
-        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
-        marking = 'TOP SECRET//NOTOUTSIDE'
-        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
-        marking = 'SECRET//ACGU'
-        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
-        marking = 'SECRET//NOTOUTSIDE'
-        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
-        marking = 'UNCLASSIFIED//FVEY'
-        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
-        marking = 'INVALID LEVEL'
-        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
-
-    def test_has_access_secret_updated_super_country(self):
-        user_accesses_json = json.dumps(
-            {
-                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
-                "formal_accesses": ["FOUO", "ABC"],
-                "country": "SUPER",
-                "visas": []
-            }
-        )
-        marking = 'UNCLASSIFIED//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
-        marking = 'CONFIDENTIAL//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
-        marking = 'SECRET//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
-        marking = 'TOP SECRET//FOUO//ABC'
-        self.assertFalse(self.access_control_instance.has_access_json_updated(user_accesses_json, marking))
-
     def test_has_access_secret_updated_country_and_visas(self):
         user_accesses_json = json.dumps(
             {
