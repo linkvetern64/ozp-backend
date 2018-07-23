@@ -194,7 +194,7 @@ class PluginMain(object):
         else:
             return 'Masked Value'
 
-    def has_access(self, username, marking):
+    def has_access_old(self, username, marking):
         # Timer used to simulate REST Service Call
         time.sleep(0.1)
         if username == 'pmurt':
@@ -257,7 +257,7 @@ class PluginMain(object):
         else:
             return False
 
-    def has_access_updated(self, username, marking):
+    def has_access(self, username, marking):
         profile = model_access.get_profile(username)
 
         if not profile:
@@ -265,7 +265,7 @@ class PluginMain(object):
 
         user_accesses_json = profile.access_control
 
-        return self.future_has_access_json(user_accesses_json, marking)
+        return self.has_access_json_updated(user_accesses_json, marking)
 
     def has_access_json_updated(self, user_accesses_json, marking):
         """
